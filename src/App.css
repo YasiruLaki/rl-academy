@@ -1,11 +1,40 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap');
+body{
+  background-color: rgb(255, 255, 255);
+}
+body{
+  margin: 0;
+}
+.container {
+  display: flex;
+  flex-direction: row;
+  font-family: "Sora", sans-serif;
+  font-optical-sizing: auto;
+  background-color: rgb(255, 255, 255);
+  height: 100%;
+  margin: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.content{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
 }
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 1,
+  'opsz' 25;
+
+  position: relative;
+  top: 50%;
+  left: 0;
+  transform: translateY(15%);
+}
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

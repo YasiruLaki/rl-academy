@@ -1,0 +1,306 @@
+.dashboard{
+    margin-right: 30px;
+    padding: 20px;
+    margin-left: 290px;
+    margin-top: 60px;
+}
+.dashboard-top-text h1{
+    font-size: 20px;
+    font-weight: 400;
+    width: 100%;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.dashboard-top-text h2{
+    font-size: 23px;
+    font-weight: 500;
+    width: 100%;
+    margin-top: 3px;
+    margin-bottom: 0;
+    align-items: end;
+}
+
+
+.dashboard-top-text{
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+    position: relative;
+    align-items: center;
+    width: 100%;
+}
+
+.dashboard-top-text button{
+    background-color: #080808d3;
+    color: white;
+    border-style: none;
+    border-radius: 12px;
+    padding: 8px;
+    margin-left: 20px;
+    padding-left: 13px;
+    padding-right: 13px;
+    font-size: 15px;
+    float: right;
+}
+
+.dashboard-top-text button span{
+    font-size: 15px;
+    margin-left: 6px;
+    transform: translateY(2px);
+}
+
+.dashboard-top-cards{
+    display: flex;
+    flex-direction: row;
+    margin-top: 60px;
+    justify-content: space-between;
+}
+
+.dashboard-card-profile{
+    margin: 0;
+    width: 45%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: #d893ff;
+    border-radius: 20px;
+    align-items: center;
+    justify-content: center;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.profile-pic{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-image: url("https://cdn-icons-png.freepik.com/512/3001/3001764.png");
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-size: cover;
+    top: 50%;
+    transform: translateY(0);
+    margin-right: 15px;
+}
+
+.profile-txt{
+    width: 60%;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.profile-txt h3{
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.dashboard-card-courses{
+    width: 28%;
+    background-color: #ffffffd4;
+    border-radius: 13px;
+    padding-left: 20px;
+    padding-right: 20px;
+    filter: drop-shadow(4px 0px 20px rgba(108, 108, 108, 0.336));
+}
+
+.dashboard-card-courses h3{
+    font-weight: 550;
+    padding-top: 20px;
+    margin: 0;
+    text-align: left;
+}
+
+.dashboard-card-courses ul{
+    list-style-type: none;
+    padding: 0;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.dashboard-card-courses ul li{
+    padding: 12px;
+    padding-top: 0px;
+    margin-right: 10px;
+    padding-bottom: 0;
+    line-height: 5px;
+    background-color: #000000;
+    color: white;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    opacity: 80%;
+    font-weight: 300;
+    font-size: 13px;
+}
+
+.count {
+    opacity: 80%;
+    font-size: 15px;
+    font-weight: 450;
+}
+
+#courses-progress{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+}
+
+#courses-progress li{
+    margin-right: 0;
+    background-color: rgba(255, 255, 255, 0);
+    color: black;
+    margin-bottom: 0;
+    width: 100%;
+    font-weight: 350;
+}
+.progress{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.progress p{
+    width: 50%;
+}
+
+#progress-count{
+    font-size: 10px;
+    width: 100%;
+    top: 50%;
+    margin-left: 6px;
+    margin-top: 0;
+    transform: translateY(13px);
+    text-align: center;
+}
+
+.progress-bar {
+    background-color: #d8d8d8;
+    border-radius: 20px;
+    position: relative;
+    margin: 13px 0;
+    height: 5px;
+    width: 30%;
+}
+
+.progress-bar-fill {
+    background-color: #111111;
+    border-radius: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 50%;
+}
+.dashboard-bottom-cards{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.dashboard-left-cards{
+    width: 57%;
+    margin-top: 20px;
+}
+
+.dashboard-card-announcements{
+    height: 330px;
+    border-radius: 20px;
+    padding-right: 20px;
+    overflow-y: auto;
+    filter: drop-shadow(4px 0px 20px rgba(108, 108, 108, 0.186));
+}
+
+.dashboard-card-announcements h3{
+    font-weight: 600;
+    text-align: left;
+}
+
+.announcement-details{
+    margin: 0;
+    font-weight: 400;
+    font-size: 12px;
+    margin-bottom: -10px;
+}
+
+.announcement{
+    margin: 0;
+    font-weight: 500;
+    color: black;
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.dashboard-right-cards{
+    width:38.8%;
+}
+
+.dashboard-card-upcoming{
+    border-radius: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    margin-top: 25px;
+    width: 100%;
+    filter: drop-shadow(4px 0px 20px rgba(108, 108, 108, 0.195));
+}
+
+.dashboard-card-upcoming h3{
+    font-weight: 600;
+    text-align: left;
+    padding-top: 15px;
+}
+.upcoming-class{
+    background-color: #ffffff;
+    color: white;
+    border-radius: 15px;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.upcoming-class span{
+    color: black;
+}
+.upcoming-class p{
+    display: inline;
+    padding-left: 7px;
+    padding-right: 7px;
+    width: auto;
+    background-color: white;
+    color: black;
+    border-radius: 15px;
+    font-weight: 500;
+}
+
+.upcoming-class h4{
+    font-weight: 400;
+    margin-top: 10px;
+    margin-bottom: 14px;
+
+}
+
+.upcoming-class button{
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-style: none;
+    border-radius: 15px;
+    padding: 8px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.upcoming-class button span{
+    font-size: 20px;
+    margin-left: 6px;
+    transform: translateY(0px);
+}
