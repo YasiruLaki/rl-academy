@@ -5,6 +5,12 @@ body{
 body{
   margin: 0;
 }
+
+:root{
+  --primary-white: #ffffffd4;
+  --primary-black: #111111;
+}
+
 .container {
   display: flex;
   flex-direction: row;

@@ -160,25 +160,25 @@ function Dashboard() {
                                         <div className='announcement-details'>
                                             <span>19:48</span> <span>23.06.2024</span> <span>Admin</span>
                                         </div>
-                                        <p><span>•</span> There will be a live session on graphic design on 23rd October 2021</p>
+                                        <p><span>•</span> There will be a live session on graphic design on 23rd October 2024</p>
                                     </div>
                                     <div className='announcement'>
                                         <div className='announcement-details'>
                                             <span>19:48</span> <span>23.06.2024</span> <span>Admin</span>
                                         </div>
-                                        <p><span>•</span> There will be a live session on graphic design on 23rd October 2021</p>
+                                        <p><span>•</span> There will be a live session on graphic design on 23rd October 2024</p>
                                     </div>
                                     <div className='announcement'>
                                         <div className='announcement-details'>
                                             <span>19:48</span> <span>23.06.2024</span> <span>Admin</span>
                                         </div>
-                                        <p><span>•</span> There will be a live session on graphic design on 23rd October 2021</p>
+                                        <p><span>•</span> There will be a live session on graphic design on 23rd October 2024</p>
                                     </div>
                                     <div className='announcement'>
                                         <div className='announcement-details'>
                                             <span>19:48</span> <span>23.06.2024</span> <span>Admin</span>
                                         </div>
-                                        <p><span>•</span> There will be a live session on graphic design on 23rd October 2021</p>
+                                        <p><span>•</span> There will be a live session on graphic design on 23rd October 2024</p>
                                     </div>
                                 </div>
                             </div>

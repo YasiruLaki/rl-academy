@@ -166,6 +166,9 @@
 
 .progress p{
     width: 50%;
+    line-height: normal;
+    transform: translateY(-6px);
+    margin-bottom: 0;
 }
 
 #progress-count{
@@ -257,7 +260,7 @@
     padding-top: 15px;
 }
 .upcoming-class{
-    background-color: #ffffff;
+    background-color: #111111e8;
     color: white;
     border-radius: 15px;
     padding: 20px;
@@ -268,15 +271,14 @@
 }
 
 .upcoming-class span{
-    color: black;
+    color: rgb(255, 255, 255);
 }
 .upcoming-class p{
     display: inline;
     padding-left: 7px;
     padding-right: 7px;
     width: auto;
-    background-color: white;
-    color: black;
+    color: rgb(255, 255, 255);
     border-radius: 15px;
     font-weight: 500;
 }
@@ -291,7 +293,7 @@
 .upcoming-class button{
     display: flex;
     align-items: center;
-    background-color: white;
+    background-color: rgb(0, 0, 0);
     border-style: none;
     border-radius: 15px;
     padding: 8px;
