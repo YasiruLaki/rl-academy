@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 
 function Dashboard() {
     const { currentUser} = useAuth();
-    const [error, setError] = useState('');
+    const [, setError] = useState('');
     const [userData, setUserData] = useState(null);
     const [upcomingClass, setUpcomingClass] = useState(null);
     const [loading, setLoading] = useState(false);

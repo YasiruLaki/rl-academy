@@ -38,13 +38,13 @@ const Sidebar = () => {
                     </ul>
                     <div className='sidebar-bottom'>
                         <ul>
-                            <li><a href='profile'><span className="material-symbols-outlined">
+                            <li><Link to="/profile"><span className="material-symbols-outlined">
                                 person
-                            </span> Profile</a></li>
+                            </span> Profile</Link></li>
 
-                            <li><a><span className="material-symbols-outlined">
+                            <li><span className="material-symbols-outlined">
                                 toggle_off
-                            </span> Dark Mode</a></li>
+                            </span> Dark Mode</li>
                         </ul>
                     </div>
                 </div>
