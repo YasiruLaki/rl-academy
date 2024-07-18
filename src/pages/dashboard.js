@@ -4,6 +4,7 @@ import { useAuth } from '../hooks/useAuth';
 import { firestore } from '../firebase';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { format } from 'date-fns';
+import LoadingScreen from '../components/loadingScreen';
 
 function Dashboard() {
     const { currentUser} = useAuth();
@@ -36,8 +37,6 @@ function Dashboard() {
                 } catch (error) {
                     console.error('Error fetching user data:', error);
                     setError('Failed to fetch user data. Please try again.');
-                } finally {
-                    setLoading(false);
                 }
             }
         };
@@ -138,13 +137,10 @@ function Dashboard() {
         }
     };
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-
     return (
         <div>
             <div className='dashboard'>
+            {loading && <LoadingScreen />}
                 {userData ? (
                     <>
                         <div className='dashboard-top-text'>
@@ -172,7 +168,9 @@ function Dashboard() {
                             </div>
                             <div className='dashboard-card-courses'>
                                 <h3><span className="material-symbols-outlined">assignment_turned_in</span> Assignments <span className='count'>({submissionsCount}/{coursesCount * 3})</span></h3>
-                                <ul id='courses-progress'>
+                                <p>No Assignments available</p>
+                                
+                                {/* <ul id='courses-progress'>
                                     {userData.courses.map((course, index) => (
                                         <li key={index}>
                                             <div className='progress'>
@@ -186,20 +184,22 @@ function Dashboard() {
                                             </div>
                                         </li>
                                     ))}
-                                </ul>
+                                </ul> */}
                             </div>
                             <div className='dashboard-card-courses'>
-                                <h3><span className="material-symbols-outlined">check</span> Attendance <span className='count'>({coursesCount}/3)</span></h3>
+                                <h3><span className="material-symbols-outlined">check</span> Attendance </h3>
                                 <ul id='courses-progress'>
                                     {userData.courses.map((course, index) => (
                                         <li key={index}>
                                             <div className='progress'>
                                                 <p>{course}</p>
                                                 <div className='progress-bar'>
-                                                    <div className='progress-bar-fill' style={{ width: `${userData.submissions[course] / 3 * 100}%` }}></div>
+                                                <div className='progress-bar-fill' style={{ width: "0px" }}></div>
+
+                                                    {/* <div className='progress-bar-fill' style={{ width: `${userData.submissions[course] / 3 * 100}%` }}></div> */}
                                                 </div>
                                                 <div>
-                                                    <div><p id='progress-count'>60%</p></div>
+                                                    <div><p id='progress-count'>0%</p></div>
                                                 </div>
                                             </div>
                                         </li>

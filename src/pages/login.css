@@ -16,7 +16,7 @@ section::before
   position: absolute;
   width: 100%;
   height: 100%;
-  background: linear-gradient(#000,rgb(128, 0, 255),#000);
+  background: linear-gradient(#ffffff,rgb(0, 0, 0),#ffffff);
 }
 @keyframes animate 
 {
@@ -44,7 +44,7 @@ section .signin
 {
   position: absolute;
   width: 500px;
-  background: #310055;  
+  background: #000000;  
   z-index: 1000;
   display: flex;
   justify-content: center;
@@ -133,8 +133,8 @@ section .signin .content .form .inputBox i
 .signin .content .form .inputBox input[type="submit"]
 {
   padding: 10px;
-  background: #b349ff;
-  color: #ffffff;
+  background: #ffffff;
+  color: #000000;
   font-weight: 600;
   font-size: 1.35em;
   letter-spacing: 0.05em;
@@ -143,6 +143,10 @@ section .signin .content .form .inputBox i
 input[type="submit"]:active
 {
   opacity: 0.6;
+}
+
+.links{
+  color: white;
 }
 
 .error{

@@ -230,6 +230,11 @@
     font-weight: 400;
     font-size: 12px;
     margin-bottom: -10px;
+    color: white;
+    background-color: black;
+    display: inline;
+    padding: 5px;
+    border-radius: 7px;
 }
 
 .announcement{

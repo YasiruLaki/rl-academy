@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './dashboard.css';
 import Sidebar from '../components/sidebar';
 import './courses.css';
+import LoadingScreen from '../components/loadingScreen';
 
 function Courses() {
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 1000);
+    }, []);
     return (
         <div>
+            {loading && <LoadingScreen />}
             <Sidebar />
             <div className='dashboard'>
                 <div className='courses-text'>

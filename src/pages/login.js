@@ -74,8 +74,8 @@ function Login() {
                                 />
                                 <i>Password</i>
                             </div>
-                            <div className="links">
-                                Forgot Password
+                            <div className="links" >
+                                Forgot Password?
                             </div>
                             <div className="inputBox">
                                 <input type="submit" value="Login" />

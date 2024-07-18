@@ -31,7 +31,7 @@ const Sidebar = () => {
                         </span> Courses</Link></li>
                         <li>                            <Link to="/submissions"><span className="material-symbols-outlined">
                             assignment
-                        </span> Submissions</Link></li>
+                        </span> Assignments</Link></li>
                         <li>                            <Link to="/community"><span className="material-symbols-outlined">
                             forum
                         </span> Community</Link></li>
@@ -42,9 +42,9 @@ const Sidebar = () => {
                                 person
                             </span> Profile</Link></li>
 
-                            <li><span className="material-symbols-outlined">
+                            {/* <li><span className="material-symbols-outlined">
                                 toggle_off
-                            </span> Dark Mode</li>
+                            </span> Dark Mode</li> */}
                         </ul>
                     </div>
                 </div>
