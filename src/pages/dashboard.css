@@ -203,6 +203,7 @@
     width: 100%;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
 }
 
 .dashboard-left-cards{
@@ -211,7 +212,8 @@
 }
 
 .dashboard-card-announcements{
-    height: 330px;
+    height: auto;
+    max-height: 370px;
     border-radius: 20px;
     padding-right: 20px;
     overflow-y: auto;
@@ -241,17 +243,16 @@
 }
 
 .dashboard-right-cards{
-    width:38.8%;
+    width:42%;
 }
 
 .dashboard-card-upcoming{
     border-radius: 10px;
     padding-left: 20px;
-    padding-right: 20px;
     padding-bottom: 20px;
     margin-top: 25px;
-    width: 100%;
     filter: drop-shadow(4px 0px 20px rgba(108, 108, 108, 0.195));
+
 }
 
 .dashboard-card-upcoming h3{
@@ -260,18 +261,24 @@
     padding-top: 15px;
 }
 .upcoming-class{
+    display: block;
     background-color: #111111e8;
     color: white;
     border-radius: 15px;
     padding: 20px;
-    width: 100%;
+    width: auto;
     display: flex;
     flex-direction: row;
-    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    line-height: 30px;
 }
 
 .upcoming-class span{
     color: rgb(255, 255, 255);
+    top: 50%;
+    transform: translateY(-39%);
 }
 .upcoming-class p{
     display: inline;
@@ -281,6 +288,18 @@
     color: rgb(255, 255, 255);
     border-radius: 15px;
     font-weight: 500;
+    vertical-align: middle;
+}
+
+.class-1{
+    height: auto;
+    margin-top: -5px;
+}
+
+.class-2{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .upcoming-class h4{
@@ -291,18 +310,167 @@
 }
 
 .upcoming-class button{
-    display: flex;
+    color: rgb(0, 0, 0);
     align-items: center;
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
     border-style: none;
-    border-radius: 15px;
-    padding: 8px;
+    border-radius: 10px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
     margin-bottom: 0;
-    padding-bottom: 0;
+    width: auto;
+    font-size: 15px;
+    margin-left: 10px;
 }
 
-.upcoming-class button span{
-    font-size: 20px;
-    margin-left: 6px;
-    transform: translateY(0px);
+
+
+@media (max-width: 1200px) {
+    .dashboard {
+        margin-left: 220px;
+        margin-right: 5px;
+    }
+
+    .dashboard-top-cards{
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 1100px) {
+    .dashboard {
+        margin-left: 220px;
+        margin-right: 15px;
+    }
+
+    .dashboard-top-cards{
+        flex-wrap: wrap;
+        margin-top: 40px;
+    }
+
+    .dashboard-card-courses{
+        width: 42%;
+        margin-top: 20px;
+    }
+    .dashboard-bottom-cards{
+        flex-direction: column;
+    }
+
+    .dashboard-left-cards{
+        width: 100%;
+    }
+
+    .dashboard-card-announcements{
+        padding-right: 0;
+        max-height: 430px;
+    }
+    .dashboard-right-cards{
+        width: 100%;
+    }   
+
+    .dashboard-card-upcoming{
+        padding-left: 0;
+    }
+
+}
+
+@media (max-width: 850px){
+    .dashboard{
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+
+    .dashboard-top-text{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .dashboard-top-text button{
+        margin-top: 20px;
+        margin-left: 0;
+        float: none;
+    }
+
+    .dashboard-top-cards{
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .dashboard-card-profile{
+        width: 90%;
+        margin-top: 20px;
+    }
+
+    .dashboard-card-courses{
+        width: 42%;
+        margin-top: 20px;
+    }
+
+    .dashboard-left-cards{
+        width: 100%;
+    }
+
+    .dashboard-right-cards{
+        width: 100%;
+    }
+
+    .dashboard-card-announcements{
+        width: 100%;
+    }
+
+    .dashboard-card-upcoming{
+        width: 100%;
+    }
+}
+
+@media (max-width: 650px){
+    .dashboard{
+        width: 100%;
+        margin-right: 25px;
+        padding-right: 35px;
+    }
+
+    .dashboard-top-cards{
+        margin-top: 35px;
+    }
+    .dashboard-card-profile{
+        width: 100%;
+    }
+
+    .dashboard-card-courses{
+        width: 100%;
+    }
+
+    .dashboard-card-announcements{
+        max-height: 400px;
+    }
+
+    .dashboard-card-upcoming{
+        width: 100%;
+    }
+}
+
+@media (max-width: 425px){
+
+    .dashboard-top-cards{
+        margin-top: 15px;
+    }
+
+    .dashboard-top-text{
+        text-align: center;
+        transform: scale(0.9);
+        flex-wrap: nowrap;
+        width: 100%;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 1400px){
+    .class-1{
+        width: 100%;
+    }
+
+    .class-2{
+        width: 100%;
+    }
 }

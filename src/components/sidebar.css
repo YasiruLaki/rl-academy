@@ -103,10 +103,28 @@
     transform: translateX(0);
 }
 
-@media screen and (max-width: 768px) {
+@media (max-width: 1200px) {
+    .sidebar {
+        width: 220px;
+    }
+
+}
+
+@media screen and (max-width: 850px) {
+    .logo{
+        margin-top: 50px;
+    }
     .sidebar {
         width: 200px;
         transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+        top: 0;
+        height: 100%;
+    }
+
+    .sidebar.open {
+        filter: drop-shadow(4px 0px 30px rgba(108, 108, 108, 0.333));
     }
 
     .sidebar-toggle {
@@ -119,6 +137,6 @@
         border: none;
         font-size: 20px;
         cursor: pointer;
-        z-index: 1000;
+        z-index: 1001;
     }
 }
