@@ -75,7 +75,7 @@ function Login() {
                                 <i>Password</i>
                             </div>
                             <div className="links">
-                                <a href="#">Forgot Password</a>
+                                Forgot Password
                             </div>
                             <div className="inputBox">
                                 <input type="submit" value="Login" />
@@ -89,4 +89,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default Login;

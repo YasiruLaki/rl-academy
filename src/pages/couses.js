@@ -8,7 +8,7 @@ function Courses() {
         <div>
             <Sidebar />
             <div className='dashboard'>
-                <div className='dashboard-top-text'>
+                <div className='courses-text'>
                     <h1>Courses</h1>
                 </div>
 

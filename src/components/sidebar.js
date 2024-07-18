@@ -1,6 +1,7 @@
 // Sidebar.js
 import React, { useState } from 'react';
 import './sidebar.css';
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -19,28 +20,31 @@ const Sidebar = () => {
                     <img className='logo' src={require("../images/rla-logo-transparent-background.ec023073 (1) copy.png")} alt="Profile" />
                     <h2>Student Portal</h2>
                     <ul>
-                        <li><a href="dashboard"><span className="material-symbols-outlined">
-                            dashboard
-                        </span> Dashboard</a></li>
-                        <li><a href="courses"><span className="material-symbols-outlined">
+                        <li>
+                            <Link to="/dashboard">
+                                <span className="material-symbols-outlined">dashboard</span>
+                                Dashboard
+                                </Link>
+                        </li>
+                        <li>                           <Link to="/courses"><span className="material-symbols-outlined">
                             book
-                        </span> Courses</a></li>
-                        <li><a href="submissions"><span className="material-symbols-outlined">
+                        </span> Courses</Link></li>
+                        <li>                            <Link to="/submissions"><span className="material-symbols-outlined">
                             assignment
-                        </span> Submissions</a></li>
-                        <li><a href="community"><span className="material-symbols-outlined">
+                        </span> Submissions</Link></li>
+                        <li>                            <Link to="/community"><span className="material-symbols-outlined">
                             forum
-                        </span> Community</a></li>
+                        </span> Community</Link></li>
                     </ul>
                     <div className='sidebar-bottom'>
                         <ul>
-                            <li><a href='profile'><span className="material-symbols-outlined">
+                            <li><Link to="/profile"><span className="material-symbols-outlined">
                                 person
-                            </span> Profile</a></li>
+                            </span> Profile</Link></li>
 
-                            <li><a><span className="material-symbols-outlined">
+                            <li><span className="material-symbols-outlined">
                                 toggle_off
-                            </span> Dark Mode</a></li>
+                            </span> Dark Mode</li>
                         </ul>
                     </div>
                 </div>
@@ -49,4 +53,4 @@ const Sidebar = () => {
     );
 }
 
-export default Sidebar;
+export default Sidebar;

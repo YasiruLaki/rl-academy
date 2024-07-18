@@ -6,14 +6,14 @@ import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firesto
 import { format } from 'date-fns';
 
 function Dashboard() {
-    const { currentUser, resetPassword } = useAuth();
+    const { currentUser} = useAuth();
+    const [, setError] = useState('');
     const [userData, setUserData] = useState(null);
     const [upcomingClass, setUpcomingClass] = useState(null);
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [coursesCount, setCoursesCount] = useState(0);
     const [submissionsCount, setSubmissionsCount] = useState(0);
-    const [announcements, setAnnouncements] = useState([]);
+    const [announcements, setAnnouncements] = useState([]);
 
     useEffect(() => {
         const fetchUserData = async () => {
