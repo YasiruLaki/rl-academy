@@ -1,0 +1,211 @@
+.add-assignments{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.add-assignments-box{
+    padding-top: 0px;
+    padding-bottom: 10px;
+    width: auto;
+    align-items: center;
+    margin-left: 10px;
+
+}
+
+.add-assignments-box h3{
+    padding: 0;
+    margin-top: 0;
+    font-weight: 500;
+}
+
+.add-assignments-box button{
+    border-style: none;
+    background-color: transparent;
+    align-items: center;
+    font-size: 18px;
+}
+
+.assignments-right{
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.submissions-box{
+    width: 100%;
+}
+
+.submissions-box-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    width: 100;
+    position: relative;
+    background-color: rgb(233, 233, 233);
+    padding-left: 25px;
+    padding-right: 25px;
+    border-radius: 5px;
+    z-index: 10;
+
+}
+
+.submissions-box-header label span{
+    font-size: 18px;
+    font-weight: 500;
+
+}
+
+.submissions-box input{
+    display: none;
+}
+
+
+.menu-content{
+    max-height: 0;
+    overflow: hidden;
+    transform: translateY(-50px);
+    padding-top: 10px;
+}
+
+.Active{
+    padding: 6px;
+    background-color: rgb(0, 255, 72);
+    border-radius: 5px;
+}
+
+.Expired{
+    color: white;
+    padding: 6px;
+    background-color: rgb(255, 0, 0);
+    border-radius: 5px;
+}
+
+.assignment-handle-number{
+    font-size: 15px;
+    font-weight: 500;
+}
+
+
+.text-editor{
+    height: 300px;
+    margin-bottom: 60px;
+    color: black;
+    margin-top: 7px;
+}
+
+.select{
+    padding: 5px;
+    margin-bottom: 20px;
+    margin-left: 5px;
+}
+
+
+.assign-title{
+    width: 100%;
+    font-size: 20px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    padding: 7px;
+    margin-top: 7px;
+    margin-right: 10px;
+}
+
+.assign-deadline{
+    margin-bottom: 20px;
+}
+
+.date-picker{
+    padding: 5px;
+    margin-left: 5px;
+}
+
+h2.react-datepicker__current-month{
+    text-align: center;
+}
+
+.assignment-handle-number{
+    font-size: 15px;
+    font-weight: 500;
+    background-color: black;
+    display: inline;
+    color: white;
+    padding: 6px;
+    border-radius: 5px;
+}
+
+.assignment-handle-title{
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.assignment-handle-des{
+    font-weight: 400;
+    opacity: 80%;
+}
+
+.assignment-handle-deadline{
+    font-size: 20px;
+    font-weight: 500;
+    color: red;
+}
+
+.dash-line{
+    width: 100%;
+    border: 1px dashed rgb(27, 27, 27);
+    margin: 0;
+}
+
+.solid-line{
+    width: 100%;
+    border: 1px solid rgb(27, 27, 27);
+    margin: 0;
+    opacity: 80%;
+}
+
+
+.assign-btn{
+    margin-top: 15px;
+    border-radius: 7px;
+}
+
+#active{
+    margin-left: 10px;
+    font-size: 15px;
+}
+
+.course-name{
+    color: white;
+    background-color: black;
+    border-radius: 7px;
+    display: inline;
+    padding: 5px;
+    font-weight: 400;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.submission{
+    margin-top: 25px;
+}
+
+.submission-div{
+    margin-top: 20px;
+}
+
+.announcement-modal-button{
+    background-color: #000000;
+    color: white;
+    border-style: none;
+    border-radius: 13px;
+    padding: 8px;
+    margin-bottom: 0;
+    font-size: 14px;
+    padding-left: 12px;
+    padding-right: 12px;
+}

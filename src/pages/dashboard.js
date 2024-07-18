@@ -171,7 +171,7 @@ function Dashboard() {
                                 </ul>
                             </div>
                             <div className='dashboard-card-courses'>
-                                <h3><span className="material-symbols-outlined">assignment_turned_in</span> Submissions <span className='count'>({submissionsCount}/{coursesCount * 3})</span></h3>
+                                <h3><span className="material-symbols-outlined">assignment_turned_in</span> Assignments <span className='count'>({submissionsCount}/{coursesCount * 3})</span></h3>
                                 <ul id='courses-progress'>
                                     {userData.courses.map((course, index) => (
                                         <li key={index}>
