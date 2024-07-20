@@ -23,7 +23,8 @@
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    background-color: #d6c1ffd4;
+    background-color: #ffffffd4;
+    filter: drop-shadow(4px 0px 20px rgba(108, 108, 108, 0.186));
     border-radius: 20px;
     justify-content: center;
     padding-left: 20px;

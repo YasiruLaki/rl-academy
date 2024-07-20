@@ -29,7 +29,7 @@ const Sidebar = () => {
                         <li>                           <Link to="/courses"><span className="material-symbols-outlined">
                             book
                         </span> Courses</Link></li>
-                        <li>                            <Link to="/submissions"><span className="material-symbols-outlined">
+                        <li>                            <Link to="/assignments"><span className="material-symbols-outlined">
                             assignment
                         </span> Assignments</Link></li>
                         <li>                            <Link to="/community"><span className="material-symbols-outlined">

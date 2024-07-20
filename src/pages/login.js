@@ -3,15 +3,19 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import './login.css';
+import LoadingScreen from '../components/loadingScreen';
+import { se } from 'date-fns/locale';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        setLoading(true);
         setError('');
         try {
             await signInWithEmailAndPassword(auth, email, password);
@@ -23,6 +27,7 @@ function Login() {
 
     return (
         <div>
+            {loading && <LoadingScreen />}
             <section>
                                 <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
                 <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>

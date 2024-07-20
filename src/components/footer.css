@@ -1,0 +1,33 @@
+.footer{
+    position: fixed;
+    background-color: #000000;
+    color: white;
+    text-align: center;
+    padding: 4px;
+    position: fixed;
+    bottom: 0;
+    z-index: 99;
+    width: calc(100% - 268px);
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-left: -50px;
+}
+
+.footer p{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+
+@media (max-width: 1200px) {
+    .footer {
+        width: calc(100% - 200px);
+    }
+}
+
+@media (max-width: 850px) {
+    .footer {
+        width: 100%;
+        margin-left: 0;
+    }
+}

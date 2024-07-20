@@ -3,18 +3,23 @@ import './dashboard.css';
 import { useAuth } from '../hooks/useAuth';
 import { firestore } from '../firebase';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { format } from 'date-fns';
+import { format, sub } from 'date-fns';
 import LoadingScreen from '../components/loadingScreen';
+import { se } from 'date-fns/locale';
 
 function Dashboard() {
-    const { currentUser} = useAuth();
+    const { currentUser } = useAuth();
     const [, setError] = useState('');
     const [userData, setUserData] = useState(null);
     const [upcomingClass, setUpcomingClass] = useState(null);
     const [loading, setLoading] = useState(false);
     const [coursesCount, setCoursesCount] = useState(0);
     const [submissionsCount, setSubmissionsCount] = useState(0);
-    const [announcements, setAnnouncements] = useState([]);
+    const [announcements, setAnnouncements] = useState([]);
+    const [latestSubmissions, setLatestSubmissions] = useState({});
+    const [submissionPending, setSubmissionPending] = useState(false);
+    const [submissionDone, setSubmissionDone] = useState(false);
+    const [latestLoading, setLatestLoading] = useState(false);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -44,7 +49,6 @@ function Dashboard() {
         fetchUserData();
     }, [currentUser]);
 
-    // Fetch upcoming classes
     useEffect(() => {
         const fetchUpcomingClasses = async () => {
             if (userData && userData.courses) {
@@ -72,22 +76,15 @@ function Dashboard() {
                     console.error('Error fetching upcoming classes:', error);
                     setError('Failed to fetch upcoming classes. Please try again.');
                 }
-                finally {
-                    setLoading(false);
-                }
+                setLoading(false);
             }
-
         };
-
 
         if (userData) {
             fetchUpcomingClasses();
-
         }
-
     }, [userData]);
 
-    // Fetch announcements
     const fetchAnnouncements = async () => {
         try {
             const announcementsRef = collection(firestore, 'announcements');
@@ -113,19 +110,95 @@ function Dashboard() {
 
     useEffect(() => {
         fetchAnnouncements();
+    }, []);
 
+
+
+    const fetchLatestSubmissionForUser = async (userEmail) => {
+        setSubmissionPending(false);
+        setLatestLoading(true);
+    
+        try {
+            // Step 1: Fetch all documents in the 'submissions' collection
+            const coursesRef = collection(firestore, 'submissions');
+            const courseSnapshot = await getDocs(coursesRef);
+
+            let latestSubmission = null;
+    
+            const assignmentSubcollectionNames = ['1', '2', '3', '4', '5'];
+    
+            const fetchPromises = [];
+    
+            for (const courseDoc of courseSnapshot.docs) {
+                const courseId = courseDoc.id;
+    
+                for (const subcollectionName of assignmentSubcollectionNames) {
+                    const subcollectionRef = collection(firestore, 'submissions', courseId, subcollectionName);
+                    
+
+                    fetchPromises.push(getDocs(subcollectionRef).then(subcollectionSnapshot => {
+                        subcollectionSnapshot.forEach(subDoc => {
+                            const submissionData = subDoc.data();
+    
+                            if (subDoc.id === userEmail) {
+
+                                const submissionDate = submissionData.Timestamp;
+    
+                                if (submissionDate) {
+                                    const submissionDateObj = submissionDate.toDate ? submissionDate.toDate() : new Date(submissionDate);
+    
+                                    if (!latestSubmission || submissionDateObj > latestSubmission.date) {
+                                        latestSubmission = {
+                                            courseId,
+                                            assignmentId: subcollectionName,
+                                            userEmail,
+                                            ...submissionData,
+                                            date: submissionDateObj
+                                        };
+                                    }
+                                }
+                            }
+                        });
+                    }));
+                }
+            }
+    
+            await Promise.all(fetchPromises);
+    
+            setLatestSubmissions(latestSubmission);
+    
+            if (latestSubmission?.Remarks === '') {
+                setSubmissionPending(true);
+            } else {
+                setSubmissionDone(true);
+            }
+    
+            setLatestLoading(false);
+    
+        } catch (error) {
+            console.error('Error fetching latest submission:', error);
+            setLatestLoading(false);
+        }
+    };
+    
+
+    useEffect(() => {
+        const fetchData = async () => {
+            await fetchLatestSubmissionForUser(currentUser.email);
+        };
+
+        fetchData();
     }, []);
 
     const handleStartMeeting = async (upcomingClass) => {
-
         const userID = userData.Id;
         const userName = userData.Name;
 
         const joinName = `${userID} - ${userName}`;
         const { join_url } = upcomingClass;
 
-        const joinUrlWithName = `${join_url}?uname=${encodeURIComponent(joinName)}`
-        
+        const joinUrlWithName = `${join_url}?uname=${encodeURIComponent(joinName)}`;
+
         try {
             const startWindow = window.open(joinUrlWithName, '_blank');
 
@@ -140,121 +213,139 @@ function Dashboard() {
     return (
         <div>
             <div className='dashboard'>
-            {loading && <LoadingScreen />}
+                {loading && <LoadingScreen />}
                 {userData ? (
                     <>
-                        <div className='dashboard-top-text'>
-                            <div className='profile-pic'>
-                            </div>
-                            <div>
-                                <h1>Welcome Back,</h1>
-                                <h2>{userData.Name} ({userData.Id})</h2>
-                            </div>
-                            {/* <div>
-                                <button>Logout<span className="material-symbols-outlined">logout</span></button>
-                            </div> */}
+                    <div className='dashboard-top-text'>
+                        <div className='profile-pic'>
                         </div>
-
-                        <div className='dashboard-top-cards'>
-                            <div className='dashboard-card-courses'>
-                                <h3><span className="material-symbols-outlined">school</span> Courses enrolled <span className='count'>({coursesCount}/3)</span></h3>
-                                <ul>
-                                    {userData.courses.map((course, index) => (
-                                        <li key={index}>
-                                            <p>{course}</p>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div className='dashboard-card-courses'>
-                                <h3><span className="material-symbols-outlined">assignment_turned_in</span> Assignments <span className='count'>({submissionsCount}/{coursesCount * 3})</span></h3>
-                                <p>No Assignments available</p>
-                                
-                                {/* <ul id='courses-progress'>
-                                    {userData.courses.map((course, index) => (
-                                        <li key={index}>
-                                            <div className='progress'>
-                                                <p>{course}</p>
-                                                <div className='progress-bar'>
-                                                    <div className='progress-bar-fill' style={{ width: `${userData.submissions[course] / 3 * 100}%` }}></div>
-                                                </div>
-                                                <div>
-                                                    <div><p id='progress-count'>60%</p></div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ul> */}
-                            </div>
-                            <div className='dashboard-card-courses'>
-                                <h3><span className="material-symbols-outlined">check</span> Attendance </h3>
-                                <ul id='courses-progress'>
-                                    {userData.courses.map((course, index) => (
-                                        <li key={index}>
-                                            <div className='progress'>
-                                                <p>{course}</p>
-                                                <div className='progress-bar'>
-                                                <div className='progress-bar-fill' style={{ width: "0px" }}></div>
-
-                                                    {/* <div className='progress-bar-fill' style={{ width: `${userData.submissions[course] / 3 * 100}%` }}></div> */}
-                                                </div>
-                                                <div>
-                                                    <div><p id='progress-count'>0%</p></div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
+                        <div>
+                            <h1>Welcome Back,</h1>
+                            <h2>{userData.Name} ({userData.Id})</h2>
                         </div>
-                        <div className='dashboard-bottom-cards'>
-                            <div className='dashboard-left-cards'>
-                            <div className='dashboard-card-announcements'>
-                                <h3><span className="material-symbols-outlined">campaign</span> Announcements</h3>
-                                {announcements.length > 0 ? (
-                                    announcements.map((announcement) => (
-                                        <div key={announcement.id} className='announcement'>
-                                            <div className='announcement-details'>
-                                                <span>{format(announcement.date, 'HH:mm')}</span><span> | </span> <span>{format(announcement.date, 'dd.MM.yyyy')}</span>
-                                            </div>
-                                            <p dangerouslySetInnerHTML={{ __html: announcement.text }}></p>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p>No announcements available.</p>
-                                )}
-                            </div>
-                            </div>
+                        {/* <div>
+                            <button>Logout<span className="material-symbols-outlined">logout</span></button>
+                        </div> */}
+                    </div>
 
-                            <div className='dashboard-right-cards'>
-                                <div className='dashboard-card-upcoming'>
-                                    <h3><span className="material-symbols-outlined">calendar_month</span> Upcoming class</h3>
-                                    {upcomingClass ? (
-                                    upcomingClass.map((upcomingClass) => (
-                                    <div className='upcoming-class'>
-                                        <div className='class-1'>
-                                            <span className="material-symbols-outlined">videocam</span>
-                                            <p id='class-course'>{upcomingClass.course}</p>
-                                        </div>
-                                        <div className='class-2'>
-                                            <div>
-                                        <p className='meeting-time'>{format(upcomingClass.time, 'dd MMMM  |  HH:mm')}</p>
-                                        </div>
-                                        <div>
-                                        <button className='join-btn' onClick={() => {handleStartMeeting(upcomingClass)}}>Join</button>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    ))
-                                ) : (
-                                    <p>No upcoming classes.</p>
-                                )}
+                    <div className='dashboard-top-cards'>
+                        <div className='dashboard-card-courses'>
+                            <h3><span className="material-symbols-outlined">school</span> Courses enrolled <span className='count'>({coursesCount}/3)</span></h3>
+                            <ul>
+                                {userData.courses.map((course, index) => (
+                                    <li key={index}>
+                                        <p>{course}</p>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div className='dashboard-card-courses'>
+                            <h3><span className="material-symbols-outlined">assignment_turned_in</span> Assignments <span className='count'>(✅ {submissionsCount})</span></h3>
+                            {latestLoading && (
+                                <div>
+                                <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                                <p className='loading-latest'>Loading Latest Submission...</p>
                                 </div>
+                            )}
+                            {submissionPending &&(
+                                <div>
+                                <p className='latest-title'>{latestSubmissions.submissionNumber}: {latestSubmissions.Title} </p>
+                                <p className='pending'>Pending Review 🕓</p>
+                                </div>
+                            )}
+                            {submissionDone &&(
+                                <div className='done-div'>
+                                <p className='latest-title'>{latestSubmissions.submissionNumber}: {latestSubmissions.Title} </p>
+                                <p className='done'>Completed ✓</p>
+                                <p className='marks'>Marks: {latestSubmissions.Marks}</p>
+                                </div>
+                            )}
+                            
+                            {/* <ul id='courses-progress'>
+                                {userData.courses.map((course, index) => (
+                                    <li key={index}>
+                                        <div className='progress'>
+                                            <p>{course}</p>
+                                            <div className='progress-bar'>
+                                                <div className='progress-bar-fill' style={{ width: ${userData.submissions[course] / 3 * 100}% }}></div>
+                                            </div>
+                                            <div>
+                                                <div><p id='progress-count'>60%</p></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul> */}
+                        </div>
+                        <div className='dashboard-card-courses'>
+                            <h3><span className="material-symbols-outlined">check</span> Attendance </h3>
+                            <ul id='courses-progress'>
+                                {userData.courses.map((course, index) => (
+                                    <li key={index}>
+                                        <div className='progress'>
+                                            <p>{course}</p>
+                                            <div className='progress-bar'>
+                                            <div className='progress-bar-fill' style={{ width: "0px" }}></div>
+
+                                                {/* <div className='progress-bar-fill' style={{ width: ${userData.submissions[course] / 3 * 100}% }}></div> */}
+                                            </div>
+                                            <div>
+                                                <div><p id='progress-count'>0%</p></div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                    <div className='dashboard-bottom-cards'>
+                        <div className='dashboard-left-cards'>
+                        <div className='dashboard-card-announcements'>
+                            <h3><span className="material-symbols-outlined">campaign</span> Announcements</h3>
+                            {announcements.length > 0 ? (
+                                announcements.map((announcement) => (
+                                    <div key={announcement.id} className='announcement'>
+                                        <div className='announcement-details'>
+                                            <span>{format(announcement.date, 'HH:mm')}</span><span> | </span> <span>{format(announcement.date, 'dd.MM.yyyy')}</span>
+                                        </div>
+                                        <p dangerouslySetInnerHTML={{ __html: announcement.text }}></p>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>No announcements available.</p>
+                            )}
+                        </div>
+                        </div>
+
+                        <div className='dashboard-right-cards'>
+                            <div className='dashboard-card-upcoming'>
+                                <h3><span className="material-symbols-outlined">calendar_month</span> Upcoming class</h3>
+                                {upcomingClass ? (
+                                upcomingClass.map((upcomingClass) => (
+                                <div className='upcoming-class'>
+                                    <div className='class-1'>
+                                        <span className="material-symbols-outlined">videocam</span>
+                                        <p id='class-course'>{upcomingClass.course}</p>
+                                    </div>
+                                    <div className='class-2'>
+                                        <div>
+                                    <p className='meeting-time'>{format(upcomingClass.time, 'dd MMMM  |  HH:mm')}</p>
+                                    </div>
+                                    <div>
+                                    <button className='join-btn' onClick={() => {handleStartMeeting(upcomingClass)}}>Join</button>
+                                    </div>
+                                    </div>
+                                </div>
+                                ))
+                            ) : (
+                                <p>No upcoming classes.</p>
+                            )}
                             </div>
                         </div>
-                    </>
+                    </div>
+                </>
                 ) : (
-                    <p>Loading user data...</p>
+                    <p>Please log in to view your dashboard.</p>
                 )}
             </div>
         </div>

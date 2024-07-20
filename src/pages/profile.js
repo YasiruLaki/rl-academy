@@ -4,6 +4,7 @@ import Sidebar from '../components/sidebar';
 import './profile.css';
 import { firestore } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import LoadingScreen from '../components/loadingScreen';
 
 const Profile = () => {
     const { currentUser, resetPassword } = useAuth();
@@ -53,18 +54,11 @@ const Profile = () => {
         }
     };
 
-    if (loading) {
-        return <p>Loading...</p>; // You can replace this with a loading spinner or animation
-    }
-
     return (
         <div>
+            {loading && <LoadingScreen />}
             <Sidebar />
             <div className='profile'>
-                <div className='dashboard-top-text'>
-                    <h1>Profile</h1>
-                    <h2>Membership: <span>Richmond Live</span> </h2>
-                </div>
                 <div className='profile-card-profile'>
                     <div className='profile-profile-pic'>
                         <button className='profile-profile-pic-btn'>Change Picture</button>

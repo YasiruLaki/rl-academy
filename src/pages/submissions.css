@@ -55,9 +55,16 @@
 
 }
 
+.submissions-box-header label{
+    font-size: 16px;
+    font-weight: 400;
+    font-style: italic;
+}
+
 .submissions-box-header label span{
     font-size: 18px;
     font-weight: 500;
+    font-style: normal;
 
 }
 
@@ -208,4 +215,91 @@ h2.react-datepicker__current-month{
     font-size: 14px;
     padding-left: 12px;
     padding-right: 12px;
+}
+
+.text-editor-submit{
+    height: 150px;
+    margin-bottom: 60px;
+    color: black;
+    margin-top: 7px;
+}
+
+.submission-txt{
+    margin-bottom: 5px;
+}
+
+.submission-p{
+    margin-bottom: 5px;
+    margin-top: 25px;
+}
+.submission-p span{
+    font-style: italic;
+    opacity: 70%;
+    font-size: 13px;
+}
+
+.checkbox{
+    margin-top: 10px;
+}
+
+.checkbox span{
+    font-size: 13px;
+}
+
+.link-box{
+    margin-top: 5px;
+    margin-bottom: 20px;
+    width: 100%;
+    border-radius: 5px;
+    padding: 5px;
+    border: solid rgba(0, 0, 0, 0.726);
+    color: black;
+}
+
+.done{
+    padding: 6px;
+    background-color: rgba(0, 255, 72, 0.303);
+    border-radius: 5px;
+}
+
+.pending{
+    padding: 6px;
+    background-color: rgba(255, 0, 0, 0.303);
+    border-radius: 5px;
+    margin-left: 0px;
+}
+
+.review-box{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    padding: 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    background-color: black;
+    color: rgb(255, 255, 255);
+}
+
+.review-box p{
+    opacity: 100%;
+}
+
+.marks span{
+    padding: 4px;
+    background-color: rgb(0, 255, 72);
+    border-radius: 5px;
+    color: black;
+}
+
+.remarks span{
+    font-style: italic;
+    opacity: 90%;
+    font-weight: 300;
+}
+
+.courses-text p{
+    font-size: 25px;
+    font-weight: 500;
+    margin-top: 0;
+    margin-bottom: 0;
 }
