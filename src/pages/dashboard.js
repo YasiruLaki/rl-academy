@@ -3,7 +3,7 @@ import './dashboard.css';
 import { useAuth } from '../hooks/useAuth';
 import { firestore } from '../firebase';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { format, sub } from 'date-fns';
+import { format, set, sub } from 'date-fns';
 import LoadingScreen from '../components/loadingScreen';
 import { se } from 'date-fns/locale';
 
@@ -117,11 +117,12 @@ function Dashboard() {
     const fetchLatestSubmissionForUser = async (userEmail) => {
         setSubmissionPending(false);
         setLatestLoading(true);
+        setSubmissionDone(false);
     
         try {
             const coursesRef = collection(firestore, 'submissions');
             const courseSnapshot = await getDocs(coursesRef);
-
+    
             let latestSubmission = null;
     
             const assignmentSubcollectionNames = ['1', '2', '3', '4', '5'];
@@ -133,47 +134,49 @@ function Dashboard() {
     
                 for (const subcollectionName of assignmentSubcollectionNames) {
                     const subcollectionRef = collection(firestore, 'submissions', courseId, subcollectionName);
-                    
-
-                    fetchPromises.push(getDocs(subcollectionRef).then(subcollectionSnapshot => {
-                        subcollectionSnapshot.forEach(subDoc => {
-                            const submissionData = subDoc.data();
     
-                            if (subDoc.id === userEmail) {
-
-                                const submissionDate = submissionData.Timestamp;
+                    fetchPromises.push(getDocs(subcollectionRef)
+                        .then(subcollectionSnapshot => {
+                            subcollectionSnapshot.forEach(subDoc => {
+                                const submissionData = subDoc.data();
     
-                                if (submissionDate) {
-                                    const submissionDateObj = submissionDate.toDate ? submissionDate.toDate() : new Date(submissionDate);
+                                if (subDoc.id === userEmail) {
+                                    const submissionDate = submissionData.Timestamp;
     
-                                    if (!latestSubmission || submissionDateObj > latestSubmission.date) {
-                                        latestSubmission = {
-                                            courseId,
-                                            assignmentId: subcollectionName,
-                                            userEmail,
-                                            ...submissionData,
-                                            date: submissionDateObj
-                                        };
+                                    if (submissionDate) {
+                                        const submissionDateObj = submissionDate.toDate ? submissionDate.toDate() : new Date(submissionDate);
+    
+                                        if (!latestSubmission || submissionDateObj > latestSubmission.date) {
+                                            latestSubmission = {
+                                                courseId,
+                                                assignmentId: subcollectionName,
+                                                userEmail,
+                                                ...submissionData,
+                                                date: submissionDateObj
+                                            };
+                                        }
                                     }
                                 }
-
-                                setLatestSubmissions(latestSubmission);
-    
-                                if (latestSubmission?.Remarks === '') {
-                                    setSubmissionPending(true);
-                                } else {
-                                    setSubmissionDone(true);
-                                }
-
-                            }else{
-                            }
-                        });
-                    }));
+                            });
+                        })
+                        .catch(error => {
+                            console.error(`Error fetching documents for course ${courseId}, assignment ${subcollectionName}:`, error);
+                        }));
                 }
             }
     
             await Promise.all(fetchPromises);
-
+    
+            if (latestSubmission) {
+                setLatestSubmissions(latestSubmission);
+                if (latestSubmission.Remarks === '') {
+                    setSubmissionPending(true);
+                } else {
+                    setSubmissionDone(true);
+                }
+            } else {
+                console.log('No submissions found for the user.');
+            }
     
             setLatestLoading(false);
     
@@ -182,6 +185,7 @@ function Dashboard() {
             setLatestLoading(false);
         }
     };
+    
     
 
     useEffect(() => {
@@ -262,7 +266,7 @@ function Dashboard() {
                                 <p className='marks-dash'>Marks: {latestSubmissions.Marks}</p>
                                 </div>
                             )}
-                            {!submissionPending && !submissionDone && (
+                            {!submissionPending && !submissionDone && !latestLoading && (
                                 <p>No submissions found.</p>
                             )}
                             

@@ -380,7 +380,7 @@ function Submissions() {
                                         {review && (
                                             <div>
                                             <div className='review-box'>
-                                                <p className='assignment-handle-des marks'>Your work has been reviewed. You scored <span>{marks}/10</span> marks.</p>
+                                                <p className='assignment-handle-des marks-sub'>Your work has been reviewed. You scored <span>{marks}/10</span> marks.</p>
                                                 <p className='assignment-handle-des remarks'>Remarks : <span>{reviewDescription}</span></p>
                                             </div>
                                              <div className='dash-line'></div>
