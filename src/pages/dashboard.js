@@ -119,7 +119,6 @@ function Dashboard() {
         setLatestLoading(true);
     
         try {
-            // Step 1: Fetch all documents in the 'submissions' collection
             const coursesRef = collection(firestore, 'submissions');
             const courseSnapshot = await getDocs(coursesRef);
 
@@ -157,6 +156,18 @@ function Dashboard() {
                                         };
                                     }
                                 }
+
+                                setLatestSubmissions(latestSubmission);
+    
+                                if (latestSubmission?.Remarks === '') {
+                                    setSubmissionPending(true);
+                                } else {
+                                    setSubmissionDone(true);
+                                }
+
+                            }else{
+                                setSubmissionPending(false);
+                                setSubmissionDone(false);
                             }
                         });
                     }));
@@ -164,14 +175,7 @@ function Dashboard() {
             }
     
             await Promise.all(fetchPromises);
-    
-            setLatestSubmissions(latestSubmission);
-    
-            if (latestSubmission?.Remarks === '') {
-                setSubmissionPending(true);
-            } else {
-                setSubmissionDone(true);
-            }
+
     
             setLatestLoading(false);
     
