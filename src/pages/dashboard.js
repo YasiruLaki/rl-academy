@@ -184,7 +184,7 @@ function Dashboard() {
     useEffect(() => {
         const fetchData = async () => {
             if (currentUser) {
-                await fetchLatestSubmissionForUser(currentUser.email);
+                fetchLatestSubmissionForUser(currentUser.email);
             }
         };
 
