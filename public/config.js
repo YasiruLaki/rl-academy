@@ -1,8 +1,0 @@
-window.configs = {
-    REACT_APP_FIREBASE_API_KEY: "AIzaSyD-4Pr3hvDtrVmb6VujUx3r5dH2BSoXop4",
-    REACT_APP_FIREBASE_AUTH_DOMAIN: "rl-academy-dffe6.firebaseapp.com",
-    REACT_APP_FIREBASE_PROJECT_ID: "rl-academy-dffe6",
-    REACT_APP_FIREBASE_STORAGE_BUCKET: "rl-academy-dffe6.appspot.com",
-    REACT_APP_FIREBASE_MESSAGING_SENDER_ID: "485840616147",
-    REACT_APP_FIREBASE_APP_ID: "1:485840616147:web:639f6ec6561140703cf226"
-  };
