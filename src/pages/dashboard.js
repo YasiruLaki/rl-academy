@@ -264,12 +264,12 @@ function Dashboard() {
                                     <div>
                                         <p className='latest-title'>{latestSubmissionData.submissionNumber}: {latestSubmissionData.Title}</p>
                                         {submissionPending && <p className='pending'>Pending Review 🕓</p>}
-                                        {submissionDone && (
+                                        {/* {submissionDone && (
                                             <div className='done-div-dash'>
                                                 <p className='done-dash'>Completed ✓</p>
                                                 <p className='marks-dash'>Marks: {latestSubmissionData.Marks}</p>
                                             </div>
-                                        )}
+                                        )} */}
                                     </div>
                                 )}
 
