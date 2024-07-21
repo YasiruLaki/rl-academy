@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './community.css';
 import { useAuth } from '../hooks/useAuth';
 import { firestore } from '../firebase';
 import { doc, getDoc, collection, query, orderBy, onSnapshot, addDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { format } from 'date-fns';
+import { format, isSameDay } from 'date-fns';
 import LoadingScreen from '../components/loadingScreen';
 
 function Community() {
@@ -15,6 +15,7 @@ function Community() {
     const [newMessage, setNewMessage] = useState('');
     const [selectedCourse, setSelectedCourse] = useState('');
     const [loading, setLoading] = useState(false);
+    const messagesEndRef = useRef(null);
 
     // Fetch user data
     useEffect(() => {
@@ -39,6 +40,7 @@ function Community() {
                     setError('Failed to fetch user data. Please try again.');
                 }
             }
+            setLoading(false)
         };
 
         fetchUserData();
@@ -46,6 +48,7 @@ function Community() {
 
     // Fetch chat messages for selected course
     useEffect(() => {
+        setLoading(true);
         if (selectedCourse) {
             const q = query(collection(firestore, 'messages', selectedCourse, 'courseMessages'), orderBy('timestamp', 'asc'));
             const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -54,11 +57,13 @@ function Community() {
                     ...doc.data()
                 }));
                 setMessages(messagesData);
+                setLoading(false);
+                scrollToBottom();
             });
 
             return () => unsubscribe();
+
         }
-        setLoading(false)
     }, [selectedCourse]);
 
     const handleSendMessage = async () => {
@@ -78,6 +83,24 @@ function Community() {
             console.error('Error sending message:', error);
             setError('Failed to send message. Please try again.');
         }
+        setLoading(false)
+    };
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    const createLinkMarkup = (content) => {
+        const urlPattern = /(https?:\/\/[^\s]+)/g;
+        const parts = content.split(urlPattern);
+
+        return parts.map((part, index) => 
+            urlPattern.test(part) ? (
+                <a key={index} href={part} target="_blank" rel="noopener noreferrer">{part}</a>
+            ) : (
+                <span key={index}>{part}</span>
+            )
+        );
     };
 
     return (
@@ -85,18 +108,19 @@ function Community() {
             {loading && <LoadingScreen />}
             <h1>Welcome to the Community Page</h1>
             <p>This is the place where users can interact and share their thoughts.</p>
-            
+
             {userData && (
                 <div className="course-select">
                     <label>Select Course:</label>
                     <select value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)}>
+                        <option value="" disabled>Select a course</option>
                         {userData.courses.map((course) => (
                             <option key={course} value={course}>{course}</option>
                         ))}
                     </select>
                 </div>
             )}
-            
+
             {selectedCourse && (
                 <div className="chat-box">
                     <div className="messages">
@@ -106,12 +130,19 @@ function Community() {
                                 className={`message ${message.sender === currentUser.email ? 'sent' : 'received'}`}
                             >
                                 <div className="message-time">
-                                    {message.timestamp ? format(message.timestamp.toDate(), 'p, MMM d') : 'Sending...'}
+                                    <div>
+                                        {message.timestamp ? (
+                                            isSameDay(message.timestamp.toDate(), new Date()) ?
+                                                format(message.timestamp.toDate(), 'p') :
+                                                format(message.timestamp.toDate(), 'MMM d')
+                                        ) : 'Sending...'}
+                                    </div>
+                                    <div className="message-sender"> | {message.name}</div>
                                 </div>
-                                <div className="message-sender">{message.name}</div>
-                                <div className="message-content">{message.content}</div>
+                                <div className="message-content">{createLinkMarkup(message.content)}</div>
                             </div>
                         ))}
+                        <div ref={messagesEndRef} />
                     </div>
                     <div className="message-input">
                         <input
