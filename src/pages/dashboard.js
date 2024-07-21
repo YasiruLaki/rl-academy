@@ -116,21 +116,21 @@ function Dashboard() {
         setSubmissionPending(false);
         setLatestLoading(true);
         setSubmissionDone(false);
-    
+
         try {
             const coursesRef = collection(firestore, 'submissions');
             const courseSnapshot = await getDocs(coursesRef);
-    
+
             const assignmentSubcollectionNames = ['1', '2', '3', '4', '5'];
             const fetchPromises = [];
             let latestSubmission = null;
-    
+
             for (const courseDoc of courseSnapshot.docs) {
                 const courseId = courseDoc.id;
-    
+
                 for (const subcollectionName of assignmentSubcollectionNames) {
                     const subcollectionRef = collection(firestore, 'submissions', courseId, subcollectionName);
-    
+
                     fetchPromises.push(getDocs(subcollectionRef)
                         .then(subcollectionSnapshot => {
                             subcollectionSnapshot.forEach(subDoc => {
@@ -139,7 +139,7 @@ function Dashboard() {
                                     const submissionDate = submissionData.Timestamp;
                                     if (submissionDate) {
                                         const submissionDateObj = submissionDate.toDate ? submissionDate.toDate() : new Date(submissionDate);
-    
+
                                         if (!latestSubmission || submissionDateObj > latestSubmission.date) {
                                             latestSubmission = {
                                                 courseId,
@@ -158,9 +158,9 @@ function Dashboard() {
                         }));
                 }
             }
-    
+
             await Promise.all(fetchPromises);
-    
+
             if (latestSubmission !== null) {
                 setLatestSubmissionData(latestSubmission);
                 if (latestSubmission.Remarks === '') {
@@ -172,9 +172,9 @@ function Dashboard() {
                 setLatestSubmissionData(null); // Ensure latestSubmissionData is set to null if no submission is found
                 console.log('No submissions found for the user.');
             }
-    
+
             setLatestLoading(false);
-    
+
         } catch (error) {
             console.error('Error fetching latest submission:', error);
             setLatestLoading(false);
@@ -187,7 +187,7 @@ function Dashboard() {
                 await fetchLatestSubmissionForUser(currentUser.email);
             }
         };
-    
+
         fetchData();
     }, [currentUser]);
 
@@ -217,56 +217,57 @@ function Dashboard() {
                 {loading && <LoadingScreen />}
                 {userData ? (
                     <>
-                    <div className='dashboard-top-text'>
-                        <div className='profile-pic'>
-                        </div>
-                        <div>
-                            <h1>Welcome Back,</h1>
-                            <h2>{userData.Name} ({userData.Id})</h2>
-                        </div>
-                        {/* <div>
+                        <div className='dashboard-top-text'>
+                            <div className='profile-pic'>
+                            </div>
+                            <div>
+                                <h1>Welcome Back,</h1>
+                                <h2>{userData.Name} ({userData.Id})</h2>
+                            </div>
+                            {/* <div>
                             <button>Logout<span className="material-symbols-outlined">logout</span></button>
                         </div> */}
-                    </div>
-
-                    <div className='dashboard-top-cards'>
-                        <div className='dashboard-card-courses'>
-                            <h3><span className="material-symbols-outlined">school</span> Courses enrolled <span className='count'>({coursesCount}/3)</span></h3>
-                            <ul>
-                                {userData.courses.map((course, index) => (
-                                    <li key={index}>
-                                        <p>{course}</p>
-                                    </li>
-                                ))}
-                            </ul>
                         </div>
-                        <div className='dashboard-card-courses'>
-                            <h3><span className="material-symbols-outlined">assignment_turned_in</span> Assignments <span className='count'>(✅ {submissionsCount})</span></h3>
-                            {latestLoading && (
-                                <div>
-                                <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-                                <p className='loading-latest'>Loading Latest Submission...</p>
-                                </div>
-                            )}
 
-                            {submissionPending && latestSubmissionData &&(
-                                <div>
-                                <p className='latest-title'>{latestSubmissionData.submissionNumber}: {latestSubmissionData.Title} </p>
-                                <p className='pending'>Pending Review 🕓</p>
-                                </div>
-                            )}
-                            {submissionDone &&(
-                                <div className='done-div-dash'>
-                                <p className='latest-title'>{latestSubmissionData.submissionNumber}: {latestSubmissionData.Title} </p>
-                                <p className='done-dash'>Completed ✓</p>
-                                <p className='marks-dash'>Marks: {latestSubmissionData.Marks}</p>
-                                </div>
-                            )}
-                            {latestSubmissionData === null && !latestLoading && (
-                                <p>No submissions found.</p>
-                            )}
-                            
-                            {/* <ul id='courses-progress'>
+                        <div className='dashboard-top-cards'>
+                            <div className='dashboard-card-courses'>
+                                <h3><span className="material-symbols-outlined">school</span> Courses enrolled <span className='count'>({coursesCount}/3)</span></h3>
+                                <ul>
+                                    {userData.courses.map((course, index) => (
+                                        <li key={index}>
+                                            <p>{course}</p>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            <div className='dashboard-card-courses'>
+                                <h3><span className="material-symbols-outlined">assignment_turned_in</span> Assignments <span className='count'>(✅ {submissionsCount})</span></h3>
+
+                                {latestLoading && (
+                                    <div>
+                                        <div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                                        <p className='loading-latest'>Loading Latest Submission...</p>
+                                    </div>
+                                )}
+
+                                {latestSubmissionData && (
+                                    <div>
+                                        <p className='latest-title'>{latestSubmissionData.submissionNumber}: {latestSubmissionData.Title}</p>
+                                        {submissionPending && <p className='pending'>Pending Review 🕓</p>}
+                                        {submissionDone && (
+                                            <div className='done-div-dash'>
+                                                <p className='done-dash'>Completed ✓</p>
+                                                <p className='marks-dash'>Marks: {latestSubmissionData.Marks}</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+
+                                {latestSubmissionData === null && !latestLoading && (
+                                    <p>No submissions found.</p>
+                                )}
+
+                                {/* <ul id='courses-progress'>
                                 {userData.courses.map((course, index) => (
                                     <li key={index}>
                                         <div className='progress'>
@@ -281,74 +282,74 @@ function Dashboard() {
                                     </li>
                                 ))}
                             </ul> */}
-                        </div>
-                        <div className='dashboard-card-courses'>
-                            <h3><span className="material-symbols-outlined">check</span> Attendance </h3>
-                            <ul id='courses-progress'>
-                                {userData.courses.map((course, index) => (
-                                    <li key={index}>
-                                        <div className='progress'>
-                                            <p>{course}</p>
-                                            <div className='progress-bar'>
-                                            <div className='progress-bar-fill' style={{ width: "0px" }}></div>
+                            </div>
+                            <div className='dashboard-card-courses'>
+                                <h3><span className="material-symbols-outlined">check</span> Attendance </h3>
+                                <ul id='courses-progress'>
+                                    {userData.courses.map((course, index) => (
+                                        <li key={index}>
+                                            <div className='progress'>
+                                                <p>{course}</p>
+                                                <div className='progress-bar'>
+                                                    <div className='progress-bar-fill' style={{ width: "0px" }}></div>
 
-                                                {/* <div className='progress-bar-fill' style={{ width: ${userData.submissions[course] / 3 * 100}% }}></div> */}
+                                                    {/* <div className='progress-bar-fill' style={{ width: ${userData.submissions[course] / 3 * 100}% }}></div> */}
+                                                </div>
+                                                <div>
+                                                    <div><p id='progress-count'>0%</p></div>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <div><p id='progress-count'>0%</p></div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                    <div className='dashboard-bottom-cards'>
-                        <div className='dashboard-left-cards'>
-                        <div className='dashboard-card-announcements'>
-                            <h3><span className="material-symbols-outlined">campaign</span> Announcements</h3>
-                            {announcements.length > 0 ? (
-                                announcements.map((announcement) => (
-                                    <div key={announcement.id} className='announcement'>
-                                        <div className='announcement-details'>
-                                            <span>{format(announcement.date, 'HH:mm')}</span><span> | </span> <span>{format(announcement.date, 'dd.MM.yyyy')}</span>
-                                        </div>
-                                        <p dangerouslySetInnerHTML={{ __html: announcement.text }}></p>
-                                    </div>
-                                ))
-                            ) : (
-                                <p>No announcements available.</p>
-                            )}
-                        </div>
-                        </div>
-
-                        <div className='dashboard-right-cards'>
-                            <div className='dashboard-card-upcoming'>
-                                <h3><span className="material-symbols-outlined">calendar_month</span> Upcoming class</h3>
-                                {upcomingClass ? (
-                                upcomingClass.map((upcomingClass) => (
-                                <div className='upcoming-class'>
-                                    <div className='class-1'>
-                                        <span className="material-symbols-outlined">videocam</span>
-                                        <p id='class-course'>{upcomingClass.course}</p>
-                                    </div>
-                                    <div className='class-2'>
-                                        <div>
-                                    <p className='meeting-time'>{format(upcomingClass.time, 'dd MMMM  |  HH:mm')}</p>
-                                    </div>
-                                    <div>
-                                    <button className='join-btn' onClick={() => {handleStartMeeting(upcomingClass)}}>Join</button>
-                                    </div>
-                                    </div>
-                                </div>
-                                ))
-                            ) : (
-                                <p>No upcoming classes.</p>
-                            )}
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
                         </div>
-                    </div>
-                </>
+                        <div className='dashboard-bottom-cards'>
+                            <div className='dashboard-left-cards'>
+                                <div className='dashboard-card-announcements'>
+                                    <h3><span className="material-symbols-outlined">campaign</span> Announcements</h3>
+                                    {announcements.length > 0 ? (
+                                        announcements.map((announcement) => (
+                                            <div key={announcement.id} className='announcement'>
+                                                <div className='announcement-details'>
+                                                    <span>{format(announcement.date, 'HH:mm')}</span><span> | </span> <span>{format(announcement.date, 'dd.MM.yyyy')}</span>
+                                                </div>
+                                                <p dangerouslySetInnerHTML={{ __html: announcement.text }}></p>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No announcements available.</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className='dashboard-right-cards'>
+                                <div className='dashboard-card-upcoming'>
+                                    <h3><span className="material-symbols-outlined">calendar_month</span> Upcoming class</h3>
+                                    {upcomingClass ? (
+                                        upcomingClass.map((upcomingClass) => (
+                                            <div className='upcoming-class'>
+                                                <div className='class-1'>
+                                                    <span className="material-symbols-outlined">videocam</span>
+                                                    <p id='class-course'>{upcomingClass.course}</p>
+                                                </div>
+                                                <div className='class-2'>
+                                                    <div>
+                                                        <p className='meeting-time'>{format(upcomingClass.time, 'dd MMMM  |  HH:mm')}</p>
+                                                    </div>
+                                                    <div>
+                                                        <button className='join-btn' onClick={() => { handleStartMeeting(upcomingClass) }}>Join</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No upcoming classes.</p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </>
                 ) : (
                     <p>Please log in to view your dashboard.</p>
                 )}
