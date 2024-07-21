@@ -162,10 +162,11 @@ function Dashboard() {
             await Promise.all(fetchPromises);
 
             if (latestSubmission !== null) {
-                console.log('Latest Submission:', latestSubmission); // Add logging
                 setLatestSubmissionData(latestSubmission);
                 if (latestSubmission.Remarks === '') {
                     setSubmissionPending(true);
+                } else {
+                    setSubmissionDone(true);
                 }
             } else {
                 setLatestSubmissionData(null); // Ensure latestSubmissionData is set to null if no submission is found
@@ -180,7 +181,6 @@ function Dashboard() {
         }
     };
 
-
     useEffect(() => {
         const fetchData = async () => {
             if (currentUser) {
@@ -189,16 +189,6 @@ function Dashboard() {
         };
 
         fetchData();
-    }, [currentUser]);
-
-    useEffect(() => {
-        const setStates = {
-            setSubmissionPending,
-            setLatestLoading,
-            setSubmissionDone,
-            setLatestSubmissionData
-        };
-        fetchLatestSubmissionForUser(currentUser, setStates);
     }, [currentUser]);
 
     const handleStartMeeting = async (upcomingClass) => {
@@ -276,7 +266,6 @@ function Dashboard() {
                                 {latestSubmissionData === null && !latestLoading && (
                                     <p>No submissions found.</p>
                                 )}
-
 
                                 {/* <ul id='courses-progress'>
                                 {userData.courses.map((course, index) => (
