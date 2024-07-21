@@ -152,6 +152,12 @@ input[type="submit"]:active
 .error{
     color: red;
 }
+
+section .signin .content .login-header-mobile
+{
+  display: none;
+}
+
 @media (max-width: 900px)
 {
   section span 
@@ -166,5 +172,35 @@ input[type="submit"]:active
   {
     width: calc(20vw - 2px);
     height: calc(20vw - 2px);
+  }
+}
+
+@media (max-width: 768px)
+{
+  section .signin
+  {
+    width: 75%;
+  }
+}
+
+@media (max-width: 375px)
+{
+  section .signin
+  {
+    width: 70%;
+  }
+  section .signin .content h2 
+  {
+    font-size: 1.5em;
+    font-weight: 500;
+  }
+
+  section .signin .content .login-header-mobile
+  {
+    display: block;
+  }
+  section .signin .content .login-header
+  {
+    display: none;
   }
 }

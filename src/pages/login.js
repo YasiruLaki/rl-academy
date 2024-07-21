@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import './login.css';
 import LoadingScreen from '../components/loadingScreen';
-import { se } from 'date-fns/locale';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [resetEmail, setResetEmail] = useState('');
+    const [resetMessage, setResetMessage] = useState('');
+    const [showReset, setShowReset] = useState(false);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const [showLogin, setShowLogin] = useState(true);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -23,13 +26,24 @@ function Login() {
         } catch (error) {
             setError(error.message);
         }
+        setLoading(false);
+    };
+
+    const handlePasswordReset = async (e) => {
+        e.preventDefault();
+        setResetMessage('');
+        try {
+            await sendPasswordResetEmail(auth, resetEmail);
+            setResetMessage('Password reset email sent. Check your inbox.');
+        } catch (error) {
+            setResetMessage(error.message);
+        }
     };
 
     return (
         <div>
             {loading && <LoadingScreen />}
             <section>
-                                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
                 <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
                 <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
                 <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
@@ -59,9 +73,11 @@ function Login() {
 
                 <div className="signin">
                     <div className="content">
-                        <h2>Richmond Live Academy Student Portal</h2>
+                        <h2 className='login-header'>Richmond Live Academy<br></br> Student Portal</h2>
+                        <h2 className='login-header-mobile'>RL Academy <br></br>Student Portal</h2>
+                    {showLogin && (
                         <form className="form" onSubmit={handleLogin}>
-                            <div className="inputBox">
+                            <div id='txt' className="inputBox">
                                 <input 
                                     type="text" 
                                     required 
@@ -70,7 +86,7 @@ function Login() {
                                 />
                                 <i>Email</i>
                             </div>
-                            <div className="inputBox">
+                            <div id='txt' className="inputBox txt">
                                 <input 
                                     type="password" 
                                     required 
@@ -79,14 +95,32 @@ function Login() {
                                 />
                                 <i>Password</i>
                             </div>
-                            <div className="links" >
-                                Forgot Password?
+                            <div className="links" onClick={() => {setShowReset(true); setShowLogin(false)}}>
+                                    Forgot Password?
                             </div>
                             <div className="inputBox">
                                 <input type="submit" value="Login" />
                             </div>
                             {error && <p className='error'>Invalid Login Credentials</p>}
                         </form>
+                    )}
+                        {showReset && (
+                            <form className="form" onSubmit={handlePasswordReset}>
+                                                            <div id='txt' className="inputBox">
+                                <input 
+                                    type="text" 
+                                    required 
+                                    value={resetEmail} 
+                                    onChange={(e) => setResetEmail(e.target.value)} 
+                                />
+                                <i>Email</i>
+                            </div>
+                            <div className="inputBox">
+                                <input type="submit" value="Reset Password" />
+                            </div>
+                                {resetMessage && <p className='links'>{resetMessage}</p>}
+                            </form>
+                        )}
                     </div>
                 </div>
             </section>
@@ -94,4 +128,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default Login;
