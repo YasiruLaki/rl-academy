@@ -3,9 +3,8 @@ import './dashboard.css';
 import { useAuth } from '../hooks/useAuth';
 import { firestore } from '../firebase';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
-import { format, set, sub } from 'date-fns';
+import { format } from 'date-fns';
 import LoadingScreen from '../components/loadingScreen';
-import { se } from 'date-fns/locale';
 
 function Dashboard() {
     const { currentUser } = useAuth();
@@ -43,6 +42,7 @@ function Dashboard() {
                     console.error('Error fetching user data:', error);
                     setError('Failed to fetch user data. Please try again.');
                 }
+                setLoading(false);
             }
         };
 
@@ -123,7 +123,7 @@ function Dashboard() {
     
             const assignmentSubcollectionNames = ['1', '2', '3', '4', '5'];
             const fetchPromises = [];
-            let latestSubmission = null; // Moved this outside the loop
+            let latestSubmission = null;
     
             for (const courseDoc of courseSnapshot.docs) {
                 const courseId = courseDoc.id;
@@ -169,6 +169,7 @@ function Dashboard() {
                     setSubmissionDone(true);
                 }
             } else {
+                setLatestSubmissionData(null); // Ensure latestSubmissionData is set to null if no submission is found
                 console.log('No submissions found for the user.');
             }
     
@@ -179,10 +180,7 @@ function Dashboard() {
             setLatestLoading(false);
         }
     };
-    
-    
-    
-    
+
     useEffect(() => {
         const fetchData = async () => {
             if (currentUser) {
@@ -192,7 +190,6 @@ function Dashboard() {
     
         fetchData();
     }, [currentUser]);
-    
 
     const handleStartMeeting = async (upcomingClass) => {
         const userID = userData.Id;
@@ -251,20 +248,21 @@ function Dashboard() {
                                 <p className='loading-latest'>Loading Latest Submission...</p>
                                 </div>
                             )}
-                            {submissionPending &&(
+
+                            {submissionPending && latestSubmissionData &&(
                                 <div>
                                 <p className='latest-title'>{latestSubmissionData.submissionNumber}: {latestSubmissionData.Title} </p>
                                 <p className='pending'>Pending Review 🕓</p>
                                 </div>
                             )}
-                            {submissionDone &&(
+                            {submissionDone && latestSubmissionData &&(
                                 <div className='done-div-dash'>
                                 <p className='latest-title'>{latestSubmissionData.submissionNumber}: {latestSubmissionData.Title} </p>
                                 <p className='done-dash'>Completed ✓</p>
                                 <p className='marks-dash'>Marks: {latestSubmissionData.Marks}</p>
                                 </div>
                             )}
-                            {!submissionPending && !submissionDone && !latestLoading && (
+                            {latestSubmissionData === null && !latestLoading && (
                                 <p>No submissions found.</p>
                             )}
                             
