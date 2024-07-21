@@ -166,8 +166,6 @@ function Dashboard() {
                 setLatestSubmissionData(latestSubmission);
                 if (latestSubmission.Remarks === '') {
                     setSubmissionPending(true);
-                } else {
-                    setSubmissionDone(true);
                 }
             } else {
                 setLatestSubmissionData(null); // Ensure latestSubmissionData is set to null if no submission is found
