@@ -55,23 +55,39 @@
 
 }
 
-.submissions-box-header label{
+.box-number{
     font-size: 16px;
     font-weight: 400;
     font-style: italic;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
-.submissions-box-header label span{
+.submissions-box-header label p{
     font-size: 18px;
     font-weight: 500;
     font-style: normal;
-
 }
 
 .submissions-box input{
     display: none;
 }
 
+.submission-box-title{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.box-title{
+    overflow: hidden;
+    display: -webkit-box;
+    line-clamp: 1;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
 
 .menu-content{
     max-height: 0;
@@ -144,6 +160,7 @@ h2.react-datepicker__current-month{
     color: white;
     padding: 6px;
     border-radius: 5px;
+    margin-right: 10px;
 }
 
 .assignment-handle-title{
@@ -182,8 +199,9 @@ h2.react-datepicker__current-month{
 }
 
 #active{
-    margin-left: 10px;
+    margin-right: 5px;
     font-size: 15px;
+
 }
 
 .course-name{
@@ -195,6 +213,7 @@ h2.react-datepicker__current-month{
     font-weight: 400;
     padding-left: 10px;
     padding-right: 10px;
+    font-size: 15px;
 }
 
 .submission{
@@ -249,7 +268,7 @@ h2.react-datepicker__current-month{
 .link-box{
     margin-top: 5px;
     margin-bottom: 20px;
-    width: 100%;
+    width: 99%;
     border-radius: 5px;
     padding: 5px;
     border: solid rgba(0, 0, 0, 0.726);
@@ -302,4 +321,71 @@ h2.react-datepicker__current-month{
     font-weight: 500;
     margin-top: 0;
     margin-bottom: 0;
+}
+
+
+@media (max-width: 900px) {
+    .course-name{
+        font-size: 15px;
+    }
+
+    .assignment-handle-title{
+        font-size: 22px;
+    
+    }
+
+    #active{
+        display: inline-block;
+        margin-top: 10px;
+    }
+
+    .assignment-modal-top{
+        transform-origin: left;
+        transform: scale(0.9);
+    }
+    .assignment-handle-des{
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 590px) {
+    .assignment-handle-des {
+        line-height: 1.5;
+    }
+}
+
+
+
+@media (max-width: 425px) {
+    .submission-box-title{
+        flex-direction: column;
+        text-align: left;
+        align-items: baseline;
+        
+    }
+    #active{
+        display: inline-block;
+    }
+
+    .box-number{
+        text-align: left;
+        margin-top: 15px;
+    }
+
+    .box-title{
+        margin-top: -10px;
+    }
+
+    .assignment-handle-deadline{
+        transform: scale(0.9);
+        transform-origin: left;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 375px) {
+    #active{
+        display: inline-block;
+    }
 }

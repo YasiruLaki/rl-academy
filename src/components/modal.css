@@ -46,3 +46,26 @@
     text-decoration: none;
     cursor: pointer;
 }
+
+
+@media (max-width: 1200px) {
+    .modal-content{
+        width:70%;
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 850px) {
+    .modal-content{
+        width: 80%;
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 425px) {
+    .modal-content{
+        width: 90%;
+        max-width: 100%;
+        padding: 20px;
+    }
+}

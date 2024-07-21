@@ -241,7 +241,36 @@ function Submissions() {
     
     
 
-    const modules = {
+    // const modules = {
+    //     toolbar: [
+    //         [{ 'header': '1' }, { 'header': '2' }, { 'header': '3' }, { 'font': [] }],
+    //         [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+    //         ['bold', 'italic', 'underline'],
+    //         [{ 'align': [] }],
+    //         [{ 'color': [] }],
+    //         ['clean'] // remove formatting button
+    //     ]
+    // };
+
+    const mobileModules = {
+        toolbar: [
+            [{ 'header': '1' }, { 'header': '2' }, { 'header': '3' }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            ['bold', 'italic'],
+            [{ 'align': [] }],
+        ]
+    };
+
+    const tabletModules = {
+        toolbar: [
+            [{ 'header': '1' }, { 'header': '2' }, { 'header': '3' }, { 'font': [] }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            ['bold', 'italic', 'underline'],
+            [{ 'align': [] }],
+        ]
+    };
+
+    const desktopModules = {
         toolbar: [
             [{ 'header': '1' }, { 'header': '2' }, { 'header': '3' }, { 'font': [] }],
             [{ 'list': 'ordered' }, { 'list': 'bullet' }],
@@ -251,6 +280,11 @@ function Submissions() {
             ['clean'] // remove formatting button
         ]
     };
+
+
+    const modules = window.innerWidth < 600 ? mobileModules :
+    window.innerWidth < 1024 ? tabletModules :
+    desktopModules;
 
 
 
@@ -294,8 +328,8 @@ function Submissions() {
                                 <div key={assignment.submissionNumber}>
                                     <label htmlFor={`toggle-${assignment.submissionNumber}`}>
                                         <div className='submissions-box-header' onClick={() => { setIsAssignmentModalOpen(true); handleClickedAssignment(assignment); }}>
-                                            <div>
-                                                <label htmlFor={`toggle-${assignment.submissionNumber}`}>Assignment {assignment.submissionNumber}:<span> {assignment.title}</span></label>
+                                            <div className='submission-box-title'>
+                                                <div><p className='box-number'>Assignment {assignment.submissionNumber} :&nbsp;&nbsp;</p></div> <div><p className='box-title'> {assignment.title}</p></div>
                                             </div>
                                             <div className='status'>
                                                 <p><span className={isActive ? 'Active' : 'Expired'}>{isActive ? 'Active' : 'Closed'}</span></p>
@@ -333,10 +367,12 @@ function Submissions() {
                             <div className='manage-modal'>
                                 {clickedAssignment && (
                                     <div className='assignment-handle'>
+                                        <div className='assignment-modal-top'>
                                         <p className='assignment-handle-number'>Assignment {clickedAssignment.submissionNumber}</p>
                                         <span id='active' className={isActive ? 'Active' : 'Expired'}>{isActive ? 'Active' : 'Closed'}</span>
                                         <span id='active' className={clickedAssignmentDone ? 'done' : ''}>{clickedAssignmentDone ? 'Completed ✓' : ''}</span>
                                         <span id='active' className={clickedAssignmentPending ? 'pending' : ''}>{clickedAssignmentPending ? 'Pending Review 🕓' : ''}</span>
+                                    </div>
 
 
                                         <p className='assignment-handle-title'>{clickedAssignment.title}</p>

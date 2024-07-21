@@ -254,10 +254,10 @@ function Dashboard() {
                                 </div>
                             )}
                             {submissionDone &&(
-                                <div className='done-div'>
+                                <div className='done-div-dash'>
                                 <p className='latest-title'>{latestSubmissions.submissionNumber}: {latestSubmissions.Title} </p>
-                                <p className='done'>Completed ✓</p>
-                                <p className='marks'>Marks: {latestSubmissions.Marks}</p>
+                                <p className='done-dash'>Completed ✓</p>
+                                <p className='marks-dash'>Marks: {latestSubmissions.Marks}</p>
                                 </div>
                             )}
                             

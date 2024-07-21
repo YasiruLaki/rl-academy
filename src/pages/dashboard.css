@@ -337,7 +337,7 @@
     margin-top: 20px;
 }
 
-.done{
+.done-dash{
     padding: 6px;
     background-color: rgba(0, 255, 72, 0.303);
     border-radius: 5px;
@@ -345,7 +345,7 @@
     margin-right: 5px;
 }
 
-.marks{
+.marks-dash{
     background-color: rgba(0, 255, 72, 0.642);
     padding: 6px;
     border-radius: 5px;

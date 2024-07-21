@@ -7,7 +7,7 @@ import Submissions from './pages/submissions';
 import Login from './pages/login';
 import Profile from './pages/profile';
 import Sidebar from './components/sidebar';
-// import Community from './pages/community';
+import Community from './pages/community';
 import { useAuth } from './hooks/useAuth';
 import './App.css';
 
@@ -25,7 +25,7 @@ const App = () => {
             <Route path="/dashboard" element={currentUser ? <Dashboard /> : <Navigate to="/" />} />
             <Route path="/courses" element={currentUser ? <Courses /> : <Navigate to="/" />} />
             <Route path="/assignments" element={currentUser ? <Submissions /> : <Navigate to="/" />} />
-            {/* <Route path="/community" element={currentUser ? <Community /> : <Navigate to="/" />} /> */}
+            <Route path="/community" element={currentUser ? <Community /> : <Navigate to="/" />} />
             <Route path="/profile" element={currentUser ? <Profile /> : <Navigate to="/" />} />
           </Routes>
         </div>
