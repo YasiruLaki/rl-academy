@@ -161,7 +161,7 @@ function Dashboard() {
     
             await Promise.all(fetchPromises);
     
-            if (latestSubmission) {
+            if (latestSubmission !== null) {
                 setLatestSubmissionData(latestSubmission);
                 if (latestSubmission.Remarks === '') {
                     setSubmissionPending(true);
