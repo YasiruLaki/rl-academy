@@ -162,6 +162,7 @@ function Dashboard() {
             await Promise.all(fetchPromises);
 
             if (latestSubmission !== null) {
+                console.log('Latest Submission:', latestSubmission); // Add logging
                 setLatestSubmissionData(latestSubmission);
                 if (latestSubmission.Remarks === '') {
                     setSubmissionPending(true);
@@ -181,10 +182,11 @@ function Dashboard() {
         }
     };
 
+
     useEffect(() => {
         const fetchData = async () => {
             if (currentUser) {
-                fetchLatestSubmissionForUser(currentUser.email);
+                await fetchLatestSubmissionForUser(currentUser.email);
             }
         };
 
@@ -276,6 +278,7 @@ function Dashboard() {
                                 {latestSubmissionData === null && !latestLoading && (
                                     <p>No submissions found.</p>
                                 )}
+
 
                                 {/* <ul id='courses-progress'>
                                 {userData.courses.map((course, index) => (
