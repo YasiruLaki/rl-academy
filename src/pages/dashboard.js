@@ -191,6 +191,16 @@ function Dashboard() {
         fetchData();
     }, [currentUser]);
 
+    useEffect(() => {
+        const setStates = {
+            setSubmissionPending,
+            setLatestLoading,
+            setSubmissionDone,
+            setLatestSubmissionData
+        };
+        fetchLatestSubmissionForUser(currentUser, setStates);
+    }, [currentUser]);
+
     const handleStartMeeting = async (upcomingClass) => {
         const userID = userData.Id;
         const userName = userData.Name;
