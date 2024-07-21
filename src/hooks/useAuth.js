@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, createContext } from 'react';
-import { getAuth, onAuthStateChanged, sendPasswordResetEmail } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, sendPasswordResetEmail, signOut } from 'firebase/auth';
 
 const AuthContext = createContext();
 
@@ -26,9 +26,20 @@ export const AuthProvider = ({ children }) => {
         return sendPasswordResetEmail(auth, email);
     };
 
+    const logout = async () => {
+        const auth = getAuth();
+        try {
+            await signOut(auth);
+        } catch (error) {
+            console.error('Error signing out:', error);
+            throw error;
+        }
+    };
+
     const value = {
         currentUser,
         resetPassword,
+        logout,
     };
 
     return (

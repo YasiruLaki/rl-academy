@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './dashboard.css';
 import { useAuth } from '../hooks/useAuth';
 import { firestore } from '../firebase';
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs,orderBy } from 'firebase/firestore';
 import { format } from 'date-fns';
 import LoadingScreen from '../components/loadingScreen';
 
@@ -88,16 +88,17 @@ function Dashboard() {
     const fetchAnnouncements = async () => {
         try {
             const announcementsRef = collection(firestore, 'announcements');
-            const querySnapshot = await getDocs(announcementsRef);
+            const announcementsQuery = query(announcementsRef, orderBy('date', 'desc'));
+            const querySnapshot = await getDocs(announcementsQuery);
             const fetchedAnnouncements = [];
             querySnapshot.forEach(doc => {
                 const data = doc.data();
                 data.id = doc.id;
                 if (data.date && data.date.toDate) {
-                    data.date = data.date.toDate(); // Convert Firestore Timestamp to JavaScript Date
+                    data.date = data.date.toDate(); 
                 } else {
                     console.warn('Date format is not a Firestore Timestamp or is missing:', data.date);
-                    data.date = new Date(); // Fallback to current date if date is missing
+                    data.date = new Date();
                 }
                 fetchedAnnouncements.push(data);
             });
@@ -107,7 +108,7 @@ function Dashboard() {
             setError('Failed to fetch announcements. Please try again.');
         }
     };
-
+    
     useEffect(() => {
         fetchAnnouncements();
     }, []);

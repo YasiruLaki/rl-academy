@@ -320,7 +320,11 @@ h2.react-datepicker__current-month{
     font-size: 25px;
     font-weight: 500;
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: 20px;
+}
+
+.subs-count{
+    margin-bottom: 20px;
 }
 
 

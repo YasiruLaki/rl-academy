@@ -40,7 +40,7 @@ function Submissions() {
             if (currentUser) {
                 setLoading(true);
                 try {
-                    const userRef = doc(firestore, 'mentors', currentUser.email);
+                    const userRef = doc(firestore, 'users', currentUser.email);
                     const docSnap = await getDoc(userRef);
                     if (docSnap.exists()) {
                         const data = docSnap.data();
@@ -107,7 +107,7 @@ function Submissions() {
             );
     
             setAssignments(allAssignments.flat());
-            setTotalSubmissions(allAssignments.flat().length - 1);
+            setTotalSubmissions(allAssignments.flat().length);
         } catch (error) {
             console.error('Error fetching assignments:', error);
             setError('Failed to fetch assignments. Please try again.');
@@ -303,7 +303,7 @@ function Submissions() {
                     <div className='submissions'>
                         <div className='courses-text'>
                             <p>Assignments</p>
-                            <span>You have submitted {completedSubmissions} of {totalSubmissions} assignments.</span>
+                            <span className='subs-count'>You have submitted {completedSubmissions} of {totalSubmissions} assignments.</span>
                             <div className='solid-line'></div>
                         </div>
 
@@ -350,8 +350,16 @@ function Submissions() {
                 </div>
             </div>
         );
+    } else {    
+        return (
+            <div key={index} className='submission'>
+                <h3 className='course-name'>&gt; {course}</h3>
+                <div className='submission-div'>
+                    <p>No assignments found for this course.</p>
+                </div>
+            </div>
+        );
     }
-    return null;
 })}
 
                         </div>
@@ -380,7 +388,7 @@ function Submissions() {
                                         {review && (
                                             <div>
                                             <div className='review-box'>
-                                                <p className='assignment-handle-des marks-sub'>Your work has been reviewed. You scored <span>{marks}/10</span> marks.</p>
+                                                <p className='assignment-handle-des marks'>Your work has been reviewed. You scored <span>{marks}/10</span> marks.</p>
                                                 <p className='assignment-handle-des remarks'>Remarks : <span>{reviewDescription}</span></p>
                                             </div>
                                              <div className='dash-line'></div>

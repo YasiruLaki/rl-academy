@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './dashboard.css';
-import Sidebar from '../components/sidebar';
 import './courses.css';
 import LoadingScreen from '../components/loadingScreen';
 import { useAuth } from '../hooks/useAuth';
@@ -90,7 +89,6 @@ function Courses() {
     return (
         <div>
             {loading && <LoadingScreen />}
-            <Sidebar />
             <div className='dashboard'>
                 <div className='courses-text'>
                     <h1>Courses</h1>

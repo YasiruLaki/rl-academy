@@ -23,7 +23,7 @@ function Community() {
             if (currentUser) {
                 setLoading(true);
                 try {
-                    const userRef = doc(firestore, 'mentors', currentUser.email);
+                    const userRef = doc(firestore, 'users', currentUser.email);
                     const docSnap = await getDoc(userRef);
                     if (docSnap.exists()) {
                         const data = docSnap.data();
@@ -106,8 +106,9 @@ function Community() {
     return (
         <div className="dashboard">
             {loading && <LoadingScreen />}
-            <h1>Welcome to the Community Page</h1>
-            <p>This is the place where users can interact and share their thoughts.</p>
+            <h1>Community</h1>
+            <p>Message thread to chat with mentors and interact with other users.</p>
+            <div className='solid-line'></div>
 
             {userData && (
                 <div className="course-select">
