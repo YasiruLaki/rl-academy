@@ -16,10 +16,10 @@ function Dashboard() {
     const [coursesCount, setCoursesCount] = useState(0);
     const [submissionsCount, setSubmissionsCount] = useState(0);
     const [announcements, setAnnouncements] = useState([]);
-    const [latestSubmissions, setLatestSubmissions] = useState({});
     const [submissionPending, setSubmissionPending] = useState(false);
     const [submissionDone, setSubmissionDone] = useState(false);
     const [latestLoading, setLatestLoading] = useState(false);
+    const [latestSubmissionData, setLatestSubmissionData] = useState(null);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -112,8 +112,6 @@ function Dashboard() {
         fetchAnnouncements();
     }, []);
 
-
-
     const fetchLatestSubmissionForUser = async (userEmail) => {
         setSubmissionPending(false);
         setLatestLoading(true);
@@ -123,11 +121,9 @@ function Dashboard() {
             const coursesRef = collection(firestore, 'submissions');
             const courseSnapshot = await getDocs(coursesRef);
     
-            let latestSubmission = null;
-    
             const assignmentSubcollectionNames = ['1', '2', '3', '4', '5'];
-    
             const fetchPromises = [];
+            let latestSubmission = null; // Moved this outside the loop
     
             for (const courseDoc of courseSnapshot.docs) {
                 const courseId = courseDoc.id;
@@ -139,10 +135,8 @@ function Dashboard() {
                         .then(subcollectionSnapshot => {
                             subcollectionSnapshot.forEach(subDoc => {
                                 const submissionData = subDoc.data();
-    
                                 if (subDoc.id === userEmail) {
                                     const submissionDate = submissionData.Timestamp;
-    
                                     if (submissionDate) {
                                         const submissionDateObj = submissionDate.toDate ? submissionDate.toDate() : new Date(submissionDate);
     
@@ -168,7 +162,7 @@ function Dashboard() {
             await Promise.all(fetchPromises);
     
             if (latestSubmission) {
-                setLatestSubmissions(latestSubmission);
+                setLatestSubmissionData(latestSubmission);
                 if (latestSubmission.Remarks === '') {
                     setSubmissionPending(true);
                 } else {
@@ -187,14 +181,18 @@ function Dashboard() {
     };
     
     
-
+    
+    
     useEffect(() => {
         const fetchData = async () => {
-            await fetchLatestSubmissionForUser(currentUser.email);
+            if (currentUser) {
+                await fetchLatestSubmissionForUser(currentUser.email);
+            }
         };
-
+    
         fetchData();
-    }, []);
+    }, [currentUser]);
+    
 
     const handleStartMeeting = async (upcomingClass) => {
         const userID = userData.Id;
@@ -255,15 +253,15 @@ function Dashboard() {
                             )}
                             {submissionPending &&(
                                 <div>
-                                <p className='latest-title'>{latestSubmissions.submissionNumber}: {latestSubmissions.Title} </p>
+                                <p className='latest-title'>{latestSubmissionData.submissionNumber}: {latestSubmissionData.Title} </p>
                                 <p className='pending'>Pending Review 🕓</p>
                                 </div>
                             )}
                             {submissionDone &&(
                                 <div className='done-div-dash'>
-                                <p className='latest-title'>{latestSubmissions.submissionNumber}: {latestSubmissions.Title} </p>
+                                <p className='latest-title'>{latestSubmissionData.submissionNumber}: {latestSubmissionData.Title} </p>
                                 <p className='done-dash'>Completed ✓</p>
-                                <p className='marks-dash'>Marks: {latestSubmissions.Marks}</p>
+                                <p className='marks-dash'>Marks: {latestSubmissionData.Marks}</p>
                                 </div>
                             )}
                             {!submissionPending && !submissionDone && !latestLoading && (
