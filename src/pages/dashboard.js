@@ -166,8 +166,6 @@ function Dashboard() {
                                 }
 
                             }else{
-                                setSubmissionPending(false);
-                                setSubmissionDone(false);
                             }
                         });
                     }));
@@ -263,6 +261,9 @@ function Dashboard() {
                                 <p className='done-dash'>Completed ✓</p>
                                 <p className='marks-dash'>Marks: {latestSubmissions.Marks}</p>
                                 </div>
+                            )}
+                            {!submissionPending && !submissionDone && (
+                                <p>No submissions found.</p>
                             )}
                             
                             {/* <ul id='courses-progress'>
