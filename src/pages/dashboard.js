@@ -255,7 +255,7 @@ function Dashboard() {
                                 <p className='pending'>Pending Review 🕓</p>
                                 </div>
                             )}
-                            {submissionDone && latestSubmissionData &&(
+                            {submissionDone &&(
                                 <div className='done-div-dash'>
                                 <p className='latest-title'>{latestSubmissionData.submissionNumber}: {latestSubmissionData.Title} </p>
                                 <p className='done-dash'>Completed ✓</p>
