@@ -257,7 +257,7 @@ function Dashboard() {
                             subcollectionSnapshot.forEach((subDoc) => {
                                 if (subDoc.id === `${userData.Id} - ${userData.Name}`) {
                                     const subDocData = subDoc.data();
-                                    if (subDocData["Total Duration (Minutes)"] >= 50) {
+                                    if (subDocData["Total Duration (Minutes)"] >= 40) {
                                         attendance++;
                                     }
                                 }
