@@ -309,7 +309,6 @@ function Submissions() {
 
                         <div className='submissions-box'>
                         {userData.courses.map((course, index) => {
-    // Filter assignments for the current course
     const courseAssignments = assignments.filter(assignment => assignment.course === course);
     
     // If there are assignments for this course, render the course name and its assignments

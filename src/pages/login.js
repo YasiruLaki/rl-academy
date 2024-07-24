@@ -79,7 +79,7 @@ function Login() {
                         <form className="form" onSubmit={handleLogin}>
                             <div id='txt' className="inputBox">
                                 <input 
-                                    type="text" 
+                                    type="email" 
                                     required 
                                     value={email} 
                                     onChange={(e) => setEmail(e.target.value)} 
