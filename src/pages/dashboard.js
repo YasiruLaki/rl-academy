@@ -305,12 +305,15 @@ function Dashboard() {
         const joinUrlWithName = `${join_url}?uname=${encodeURIComponent(joinName)}`;
 
         try {
+            setLoading(true);
             const startWindow = window.open(joinUrlWithName, '_blank');
 
             if (startWindow) {
+                setLoading(false);
                 return;
             }
         } catch (error) {
+            setLoading(false);
             console.error('Failed to start meeting as host:', error);
         }
     };
