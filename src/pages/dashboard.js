@@ -239,6 +239,7 @@ function Dashboard() {
                     documentIds.map(docId => fetchSubcollections(docId))
                 );
 
+
                 // Process each document and its subcollections
                 await Promise.all(attendanceSnapshot.docs.map(async (doc, index) => {
                     const docId = doc.id;
@@ -257,6 +258,7 @@ function Dashboard() {
                             subcollectionSnapshot.forEach((subDoc) => {
                                 if (subDoc.id === `${userData.Id} - ${userData.Name}`) {
                                     const subDocData = subDoc.data();
+
                                     if (subDocData["Total Duration (Minutes)"] >= 40) {
                                         attendance++;
                                     }
@@ -273,9 +275,7 @@ function Dashboard() {
                 // Update state with processed data
                 setAttendanceData(Object.entries(accumulatedAttendance).map(([id, attendance]) => ({ id, attendance })));
                 setTotalClasses(Object.entries(totalClassesMap).map(([id, count]) => ({ id, totalClasses: count })));
-
-                console.log('Attendance data:', accumulatedAttendance);
-                console.log('Total classes:', totalClassesMap);
+                
             } catch (error) {
                 console.error('Error fetching attendance:', error);
                 setError('Failed to fetch attendance.');
