@@ -176,7 +176,7 @@
     width: 100%;
     top: 50%;
     margin-left: 6px;
-    margin-top: 0;
+    margin-top: -4px;
     transform: translateY(13px);
     text-align: center;
 }

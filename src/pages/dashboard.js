@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import './dashboard.css';
 import { useAuth } from '../hooks/useAuth';
 import { firestore } from '../firebase';
-import { doc, getDoc, collection, query, where, getDocs,orderBy } from 'firebase/firestore';
-import { format } from 'date-fns';
+import { doc, getDoc, collection, query, where, getDocs, orderBy, onSnapshot } from 'firebase/firestore';
+import { format, set, sub } from 'date-fns';
 import LoadingScreen from '../components/loadingScreen';
+import axios from 'axios';
 
 function Dashboard() {
     const { currentUser } = useAuth();
-    const [, setError] = useState('');
+    const [error, setError] = useState('');
     const [userData, setUserData] = useState(null);
     const [upcomingClass, setUpcomingClass] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -19,6 +20,8 @@ function Dashboard() {
     const [submissionDone, setSubmissionDone] = useState(false);
     const [latestLoading, setLatestLoading] = useState(false);
     const [latestSubmissionData, setLatestSubmissionData] = useState(null);
+    const [attendanceData, setAttendanceData] = useState([]);
+    const [totalClasses, setTotalClasses] = useState([]);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -42,14 +45,13 @@ function Dashboard() {
                     console.error('Error fetching user data:', error);
                     setError('Failed to fetch user data. Please try again.');
                 }
-                setLoading(false);
             }
         };
 
         fetchUserData();
     }, [currentUser]);
 
-    
+
     useEffect(() => {
         const fetchUpcomingClasses = async () => {
             if (userData && userData.courses) {
@@ -62,49 +64,41 @@ function Dashboard() {
                         const data = doc.data();
                         data.id = doc.id;
 
-    
+
                         if (data.time && data.time.seconds) {
                             data.time = new Date(data.time.seconds * 1000 + data.time.nanoseconds / 1000000);
                         } else {
                             console.warn('Invalid time format:', data.time);
                         }
-    
+
                         // Set end time to 1 hour after start time
                         const durationMs = 1 * 60 * 60 * 1000; // 1 hour in milliseconds
                         data.endTime = new Date(data.time.getTime() + durationMs);
-    
+
                         classes.push(data);
                     });
-    
+
                     console.log('All classes:', classes);
-    
+
                     const now = new Date();
-    
+
                     const upcomingClasses = classes
                         .filter(c => c.endTime > now)  // Filter based on end time
                         .sort((a, b) => a.time - b.time);  // Sort based on start time
 
-    
+
                     setUpcomingClass(upcomingClasses);
                 } catch (error) {
                     setError('Failed to fetch upcoming classes. Please try again.');
                 }
-                setLoading(false);
             }
         };
-    
+
         if (userData) {
             fetchUpcomingClasses();
         }
     }, [userData]);
-    
-    
-    
-    
-    
-    
-    
-    
+
 
     const fetchAnnouncements = async () => {
         try {
@@ -116,7 +110,7 @@ function Dashboard() {
                 const data = doc.data();
                 data.id = doc.id;
                 if (data.date && data.date.toDate) {
-                    data.date = data.date.toDate(); 
+                    data.date = data.date.toDate();
                 } else {
                     console.warn('Date format is not a Firestore Timestamp or is missing:', data.date);
                     data.date = new Date();
@@ -129,10 +123,11 @@ function Dashboard() {
             setError('Failed to fetch announcements. Please try again.');
         }
     };
-    
+
     useEffect(() => {
         fetchAnnouncements();
     }, []);
+
 
     const fetchLatestSubmissionForUser = async (userEmail) => {
         setSubmissionPending(false);
@@ -143,7 +138,7 @@ function Dashboard() {
             const coursesRef = collection(firestore, 'submissions');
             const courseSnapshot = await getDocs(coursesRef);
 
-            const assignmentSubcollectionNames = ['1', '2', '3', '4', '5'];
+            const assignmentSubcollectionNames = ['1', '2', '3', '4', '5', '6'];
             const fetchPromises = [];
             let latestSubmission = null;
 
@@ -203,6 +198,7 @@ function Dashboard() {
         }
     };
 
+
     useEffect(() => {
         const fetchData = async () => {
             if (currentUser) {
@@ -212,6 +208,92 @@ function Dashboard() {
 
         fetchData();
     }, [currentUser]);
+
+
+    useEffect(() => {
+        const fetchSubcollections = async (documentId) => {
+            try {
+                const response = await axios.get(`https://rla-backend.netlify.app/subcollections/${documentId}`);
+                return response.data;
+            } catch (err) {
+                console.error('Error fetching subcollections:', err);
+                setError('Failed to fetch subcollections.');
+                return [];
+            }
+        };
+
+        const fetchAttendance = async () => {
+            try {
+                // Fetch the top-level documents
+                const attendanceRef = collection(firestore, 'attendance');
+                const attendanceSnapshot = await getDocs(query(attendanceRef));
+
+                const accumulatedAttendance = {};
+                const totalClassesMap = {};
+
+                // Collect all document IDs for concurrent subcollection fetching
+                const documentIds = attendanceSnapshot.docs.map(doc => doc.id);
+
+                // Fetch subcollections for all documents concurrently
+                const subcollectionsData = await Promise.all(
+                    documentIds.map(docId => fetchSubcollections(docId))
+                );
+
+                // Process each document and its subcollections
+                await Promise.all(attendanceSnapshot.docs.map(async (doc, index) => {
+                    const docId = doc.id;
+                    const subcollectionNames = subcollectionsData[index];
+
+                    totalClassesMap[docId] = subcollectionNames.length;
+
+                    let attendance = 0;
+
+                    // Fetch subcollections data concurrently
+                    await Promise.all(subcollectionNames.map(async (subcollection) => {
+                        try {
+                            const subcollectionRef = collection(firestore, `attendance/${docId}/${subcollection}`);
+                            const subcollectionSnapshot = await getDocs(subcollectionRef);
+
+                            subcollectionSnapshot.forEach((subDoc) => {
+                                if (subDoc.id === `${userData.Id} - ${userData.Name}`) {
+                                    const subDocData = subDoc.data();
+                                    if (subDocData["Total Duration (Minutes)"] >= 50) {
+                                        attendance++;
+                                    }
+                                }
+                            });
+                        } catch (error) {
+                            console.error(`Error fetching subcollection ${subcollection}:`, error);
+                        }
+                    }));
+
+                    accumulatedAttendance[docId] = attendance;
+                }));
+
+                // Update state with processed data
+                setAttendanceData(Object.entries(accumulatedAttendance).map(([id, attendance]) => ({ id, attendance })));
+                setTotalClasses(Object.entries(totalClassesMap).map(([id, count]) => ({ id, totalClasses: count })));
+
+                console.log('Attendance data:', accumulatedAttendance);
+                console.log('Total classes:', totalClassesMap);
+            } catch (error) {
+                console.error('Error fetching attendance:', error);
+                setError('Failed to fetch attendance.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (userData) {
+            fetchAttendance();
+        }
+    }, [userData]);
+
+    if (error) {
+        return <div>{error}</div>;
+    }
+
+
 
     const handleStartMeeting = async (upcomingClass) => {
         const userID = userData.Id;
@@ -307,22 +389,30 @@ function Dashboard() {
                             </div>
                             <div className='dashboard-card-courses'>
                                 <h3><span className="material-symbols-outlined">check</span> Attendance </h3>
-                                <ul id='courses-progress'>
-                                    {userData.courses.map((course, index) => (
-                                        <li key={index}>
-                                            <div className='progress'>
-                                                <p>{course}</p>
-                                                <div className='progress-bar'>
-                                                    <div className='progress-bar-fill' style={{ width: "0px" }}></div>
 
-                                                    {/* <div className='progress-bar-fill' style={{ width: ${userData.submissions[course] / 3 * 100}% }}></div> */}
+                                <ul id='courses-progress'>
+                                    {userData.courses.map((course, index) => {
+
+                                        const courseTotal = totalClasses.find(item => item.id === course)?.totalClasses || 0;
+                                        const courseAttendance = attendanceData.find(item => item.id === course)?.attendance || 0;
+                                        console.log('Course:', course, 'Total:', courseTotal, 'Attendance:', courseAttendance);
+
+                                        const progressWidth = courseTotal > 0 ? `${(courseAttendance / courseTotal) * 100}%` : '0%';
+                                        console.log('Progress width:', progressWidth);
+                                        return (
+                                            <li key={index}>
+                                                <div className='progress'>
+                                                    <p>{course}</p>
+                                                    <div className='progress-bar'>
+                                                        <div className='progress-bar-fill' style={{ width: progressWidth }}></div>
+                                                    </div>
+                                                    <div>
+                                                        <p id='progress-count'>{progressWidth}</p>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <div><p id='progress-count'>0%</p></div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    ))}
+                                            </li>
+                                        );
+                                    })}
                                 </ul>
                             </div>
                         </div>
