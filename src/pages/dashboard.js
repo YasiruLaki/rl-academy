@@ -22,6 +22,7 @@ function Dashboard() {
     const [latestSubmissionData, setLatestSubmissionData] = useState(null);
     const [attendanceData, setAttendanceData] = useState([]);
     const [totalClasses, setTotalClasses] = useState([]);
+    const [materials, setMaterials] = useState([]);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -275,7 +276,7 @@ function Dashboard() {
                 // Update state with processed data
                 setAttendanceData(Object.entries(accumulatedAttendance).map(([id, attendance]) => ({ id, attendance })));
                 setTotalClasses(Object.entries(totalClassesMap).map(([id, count]) => ({ id, totalClasses: count })));
-                
+
             } catch (error) {
                 console.error('Error fetching attendance:', error);
                 setError('Failed to fetch attendance.');
@@ -287,6 +288,24 @@ function Dashboard() {
         if (userData) {
             fetchAttendance();
         }
+    }, [userData]);
+
+    useEffect(() => {
+        const fetchMaterials = async () => {
+            if (userData && userData.courses && userData.courses.length > 0) {
+                try {
+                    const classesRef = collection(firestore, 'materials');
+                    const q = query(classesRef, where('course', 'in', userData.courses));
+                    const querySnapshot = await getDocs(q);
+                    const files = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    setMaterials(files);
+                } catch (error) {
+                    console.error('Error fetching materials:', error);
+                }
+            }
+        };
+
+        fetchMaterials();
     }, [userData]);
 
     if (error) {
@@ -463,7 +482,42 @@ function Dashboard() {
                                     )}
                                 </div>
                             </div>
+
                         </div>
+                        <div className='dashboard-left-cards'>
+                        <div className='dashboard-card-announcements'>
+                            <h3><span className="material-symbols-outlined">Attachment</span>Class Materials</h3>
+                            {materials.length === 0 ? (
+                                <div className='no-materials'>
+                                    <p>No class materials available.</p>
+                                </div>
+                            ) : (
+                                materials
+                                    .filter(material => material.url && material.topic && material.size !== undefined)
+                                    .map((material) => (
+                                        <div key={material.id}>
+                                            <a className='materials-a' href={material.url} target='_blank' rel='noopener noreferrer'>
+                                                <div className='materials'>
+                                                    <div className='upcoming-class'>
+                                                        <div className='materials-1'>
+                                                            <div className='materials-div'>
+                                                                <span className="material-symbols-outlined">book</span>
+                                                                <p className='materials-name'>{material.topic}</p>
+                                                            </div>
+                                                            <div className='size-div'>
+                                                                <span className='size'>({(material.size / (1024 * 1024)).toFixed(2)} MB)</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    ))
+                            )}
+
+
+                        </div>
+                    </div>
                     </>
                 ) : (
                     <p>Please log in to view your dashboard.</p>
