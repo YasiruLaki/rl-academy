@@ -502,7 +502,7 @@ function Dashboard() {
                                                         <div className='materials-1'>
                                                             <div className='materials-div'>
                                                                 <span className="material-symbols-outlined">book</span>
-                                                                <p className='materials-name'>{material.topic}</p>
+                                                                <p className='materials-name'>{material.topic} <span>({material.course})</span></p>
                                                             </div>
                                                             <div className='size-div'>
                                                                 <span className='size'>({(material.size / (1024 * 1024)).toFixed(2)} MB)</span>
