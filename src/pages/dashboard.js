@@ -494,6 +494,7 @@ function Dashboard() {
                             ) : (
                                 materials
                                     .filter(material => material.url && material.topic && material.size !== undefined)
+                                    .sort((a, b) => b.date - a.date)
                                     .map((material) => (
                                         <div key={material.id}>
                                             <a className='materials-a' href={material.url} target='_blank' rel='noopener noreferrer'>
